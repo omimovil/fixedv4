@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "personal_addresses",
+  "info": {
+    "singularName": "personal-address",
+    "pluralName": "personal-addresses",
+    "displayName": "PersonalAddress",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "username": {
+      "type": "string"
+    },
+    "lastname": {
+      "type": "string"
+    },
+    "address_two": {
+      "type": "string"
+    },
+    "address_one": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "phone_number": {
+      "type": "string"
+    },
+    "authorID": {
+      "type": "string",
+      "unique": true,
+      "required": false
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "personal_address"
+    },
+    "zip_code": {
+      "type": "string"
+    }
+  }
+}

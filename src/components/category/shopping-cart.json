@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_category_shopping_carts",
+  "info": {
+    "displayName": "ShoppingCart"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    }
+  }
+}

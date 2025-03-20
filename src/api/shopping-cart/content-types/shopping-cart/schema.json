@@ -1,0 +1,105 @@
+{
+  "kind": "collectionType",
+  "collectionName": "shopping_carts",
+  "info": {
+    "singularName": "shopping-cart",
+    "pluralName": "shopping-carts",
+    "displayName": "ShoppingCart",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "uploaded_at": {
+      "type": "date",
+      "unique": false,
+      "required": false
+    },
+    "active": {
+      "type": "boolean",
+      "default": true,
+      "required": false
+    },
+    "cartId": {
+      "type": "uid",
+      "maxLength": 20,
+      "required": false
+    },
+    "product_ids": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product.product",
+      "mappedBy": "shopping_carts"
+    },
+    "quantity": {
+      "type": "integer",
+      "required": true
+    },
+    "subtotal": {
+      "type": "decimal"
+    },
+    "availability": {
+      "type": "boolean",
+      "default": false,
+      "required": false
+    },
+    "authorID": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "brand": {
+      "type": "string"
+    },
+    "discount": {
+      "type": "decimal"
+    },
+    "color": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::color.color",
+      "inversedBy": "shopping_carts"
+    },
+    "size": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::size.size",
+      "inversedBy": "shopping_carts"
+    },
+    "productID": {
+      "type": "string",
+      "required": true,
+      "unique": false
+    },
+    "sizeID": {
+      "type": "string",
+      "unique": false
+    },
+    "colorID": {
+      "type": "string",
+      "unique": false
+    },
+    "colorName": {
+      "type": "string"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "title": {
+      "type": "string"
+    }
+  }
+}

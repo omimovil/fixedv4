@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "delivery_dates",
+  "info": {
+    "singularName": "delivery-date",
+    "pluralName": "delivery-dates",
+    "displayName": "DeliveryDate",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "deliveryDateName": {
+      "type": "string"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product.product",
+      "mappedBy": "delivery_dates"
+    }
+  }
+}

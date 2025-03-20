@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "shipping_states",
+  "info": {
+    "singularName": "shipping-state",
+    "pluralName": "shipping-states",
+    "displayName": "shippingState",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "to_ship": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "shipped": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "return": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "delivered": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "order": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::order.order",
+      "mappedBy": "shipping_state"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product",
+      "mappedBy": "shipping_state"
+    }
+  }
+}

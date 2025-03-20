@@ -1,0 +1,42 @@
+{
+  "kind": "singleType",
+  "collectionName": "contact_addresses",
+  "info": {
+    "singularName": "contact-address",
+    "pluralName": "contact-addresses",
+    "displayName": "contactAddress"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "username": {
+      "type": "string"
+    },
+    "lastname": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "phone_number": {
+      "type": "string"
+    },
+    "address_one": {
+      "type": "string"
+    },
+    "address_two": {
+      "type": "string"
+    },
+    "authorID": {
+      "type": "string"
+    }
+  }
+}

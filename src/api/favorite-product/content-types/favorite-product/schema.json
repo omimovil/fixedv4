@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "favorite_products",
+  "info": {
+    "singularName": "favorite-product",
+    "pluralName": "favorite-products",
+    "displayName": "FavoriteProduct",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "admin_users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "admin::user"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "favorite_products"
+    },
+    "productID": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::product.product",
+      "inversedBy": "favorite_products"
+    },
+    "userID": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    }
+  }
+}
