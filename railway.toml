@@ -1,5 +1,5 @@
 [build]
-command = "npm run migrate"
+command = "npm install && npm run migrate"
 
 [deploy]
-command = "npm run migrate"
+command = "npm install && npm run migrate"
