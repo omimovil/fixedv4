@@ -6,7 +6,7 @@
   "scripts": {
     "develop": "strapi develop",
     "start": "strapi start",
-    "build": "strapi build",
+    "build": "npm run migrate && strapi build",
     "strapi": "strapi",
     "deploy": "strapi deploy",
     "migrate": "node scripts/migrate-to-railway.js"
