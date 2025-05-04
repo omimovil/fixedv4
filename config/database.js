@@ -63,16 +63,33 @@ module.exports = ({ env }) => {
       },
       pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
     },
+
     postgres: {
       connection: {
         connectionString: env('DATABASE_URL'),
-        ssl: env.bool('DATABASE_SSL', false) && {
-          rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true),
-        },
+        ssl: env.bool('DATABASE_SSL', true) ? {
+          rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', false), // Railway suele necesitar false
+        } : false,
         schema: env('DATABASE_SCHEMA', 'public'),
       },
-      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
+      pool: {
+        min: env.int('DATABASE_POOL_MIN', 2),
+        max: env.int('DATABASE_POOL_MAX', 10),
+      },
     },
+    
+    // Second
+    // postgres: {
+    //   connection: {
+    //     connectionString: env('DATABASE_URL'),
+    //     ssl: env.bool('DATABASE_SSL', false) && {
+    //       rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true),
+    //     },
+    //     schema: env('DATABASE_SCHEMA', 'public'),
+    //   },
+    //   pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
+    // },
+  //Original version
     // postgres: {
     //   connection: {
     //     connectionString: env('DATABASE_URL'),
