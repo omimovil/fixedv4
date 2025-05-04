@@ -115,8 +115,31 @@ if (!fs.existsSync(SQLITE_DB_PATH)) {
 }
 
 // Conectar a la base de datos de Strapi
-const sqliteDb = new sqlite3.Database(SQLITE_DB_PATH);
+const db = new sqlite3.Database(SQLITE_DB_PATH);
 console.log('Conectado a la base de datos de Strapi:', SQLITE_DB_PATH);
+
+// Verificar si la base de datos está vacía
+async function verifyDatabase() {
+  try {
+    const tables = await new Promise((resolve, reject) => {
+      db.all(`SELECT name FROM sqlite_master WHERE type='table'`, (err, rows) => {
+        if (err) reject(err);
+        resolve(rows.map(row => row.name));
+      });
+    });
+
+    if (tables.length === 0) {
+      console.error('Error: La base de datos está vacía. Asegúrate de que Strapi esté ejecutando localmente.');
+      process.exit(1);
+    }
+
+    console.log('Tablas encontradas en la base de datos:', tables);
+    return tables;
+  } catch (error) {
+    console.error('Error al verificar tablas:', error);
+    process.exit(1);
+  }
+}
 
 // Orden de migración
 const MIGRATION_ORDER = [
@@ -138,7 +161,7 @@ async function migrateTable(tableName) {
     
     // Verificar si la tabla existe
     const tableExists = await new Promise((resolve, reject) => {
-      sqliteDb.get(`SELECT name FROM sqlite_master WHERE type='table' AND name=?`, [tableName], (err, row) => {
+      db.get(`SELECT name FROM sqlite_master WHERE type='table' AND name=?`, [tableName], (err, row) => {
         if (err) reject(err);
         resolve(!!row);
       });
@@ -151,7 +174,7 @@ async function migrateTable(tableName) {
 
     // Obtener estructura de la tabla
     const columns = await new Promise((resolve, reject) => {
-      sqliteDb.all(`PRAGMA table_info(${tableName})`, (err, rows) => {
+      db.all(`PRAGMA table_info(${tableName})`, (err, rows) => {
         if (err) reject(err);
         resolve(rows.map(row => row.name));
       });
@@ -159,7 +182,7 @@ async function migrateTable(tableName) {
 
     // Obtener datos
     const rows = await new Promise((resolve, reject) => {
-      sqliteDb.all(`SELECT * FROM ${tableName}`, (err, data) => {
+      db.all(`SELECT * FROM ${tableName}`, (err, data) => {
         if (err) {
           console.error(`Error obteniendo datos de ${tableName}:`, err);
           reject(err);
@@ -248,61 +271,53 @@ async function migrateInOrder() {
   console.log('=== INICIANDO MIGRACIÓN DE DATOS ===');
   console.log('Iniciando migración en orden específico...');
 
-  // Mostrar información de la base de datos
-  console.log('\nInformación de la base de datos:');
   try {
-    const sqliteDb = new sqlite3.Database(SQLITE_DB_PATH);
-    const sqliteTables = await new Promise((resolve, reject) => {
-      sqliteDb.all(`SELECT name FROM sqlite_master WHERE type='table'`, (err, tables) => {
-        if (err) reject(err);
-        resolve(tables.map(t => t.name));
-      });
-    });
-    console.log('Tablas en SQLite:', sqliteTables);
-  } catch (error) {
-    console.error('Error al listar tablas:', error);
-  }
+    // Verificar la base de datos al inicio
+    await verifyDatabase();
 
-  // Migrar tablas en orden específico
-  for (const tableName of MIGRATION_ORDER) {
-    console.log(`\nMigrando tabla: ${tableName}`);
-    try {
-      // Verificar si la tabla existe
-      const sqliteDb = new sqlite3.Database(SQLITE_DB_PATH);
-      const tableExists = await new Promise((resolve, reject) => {
-        sqliteDb.get(`SELECT name FROM sqlite_master WHERE type='table' AND name=?`, [tableName], (err, row) => {
-          if (err) reject(err);
-          resolve(!!row);
+    // Migrar tablas en orden específico
+    for (const tableName of MIGRATION_ORDER) {
+      console.log(`\nMigrando tabla: ${tableName}`);
+      try {
+        // Verificar si la tabla existe
+        const tableExists = await new Promise((resolve, reject) => {
+          db.get(`SELECT name FROM sqlite_master WHERE type='table' AND name=?`, [tableName], (err, row) => {
+            if (err) reject(err);
+            resolve(!!row);
+          });
         });
-      });
-      
-      if (!tableExists) {
-        console.error(`Tabla ${tableName} no existe en SQLite`);
+        
+        if (!tableExists) {
+          console.error(`Tabla ${tableName} no existe en SQLite`);
+          continue;
+        }
+
+        await migrateTable(tableName);
+        console.log(`Tabla ${tableName} migrada exitosamente`);
+      } catch (error) {
+        console.error(`Error migrando ${tableName}:`, error);
+        continue; // Continuar con la siguiente tabla aunque haya error
+      }
+    }
+
+    // Migrar tablas restantes
+    const remainingTables = TABLES.filter(table => !MIGRATION_ORDER.includes(table));
+    for (const tableName of remainingTables) {
+      console.log(`\nMigrando tabla: ${tableName}`);
+      try {
+        await migrateTable(tableName);
+        console.log(`Tabla ${tableName} migrada exitosamente`);
+      } catch (error) {
+        console.error(`Error migrando ${tableName}:`, error);
         continue;
       }
-
-      await migrateTable(tableName);
-      console.log(`Tabla ${tableName} migrada exitosamente`);
-    } catch (error) {
-      console.error(`Error migrando ${tableName}:`, error);
-      continue; // Continuar con la siguiente tabla aunque haya error
     }
-  }
 
-  // Migrar tablas restantes
-  const remainingTables = TABLES.filter(table => !MIGRATION_ORDER.includes(table));
-  for (const tableName of remainingTables) {
-    console.log(`\nMigrando tabla: ${tableName}`);
-    try {
-      await migrateTable(tableName);
-      console.log(`Tabla ${tableName} migrada exitosamente`);
-    } catch (error) {
-      console.error(`Error migrando ${tableName}:`, error);
-      continue;
-    }
+    console.log('\nMigración completada');
+  } catch (error) {
+    console.error('Error en la migración:', error);
+    process.exit(1);
   }
-
-  console.log('\nMigración completada');
 }
 
 // Ejecutar la migración
