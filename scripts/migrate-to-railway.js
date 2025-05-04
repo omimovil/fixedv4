@@ -158,36 +158,6 @@ async function verifyDatabase() {
   }
 }
 
-// Verificar si existe la base de datos de Strapi
-if (!fs.existsSync(SQLITE_DB_PATH)) {
-  console.error('Error: No se encontró la base de datos de Strapi en:', SQLITE_DB_PATH);
-  console.error('Por favor, asegúrate de que Strapi esté ejecutando localmente antes de ejecutar este script.');
-  process.exit(1);
-async function verifyDatabase() {
-  try {
-    const dbPath = await findDatabase();
-    const db = new sqlite3.Database(dbPath);
-
-    const tables = await new Promise((resolve, reject) => {
-      db.all(`SELECT name FROM sqlite_master WHERE type='table'`, (err, rows) => {
-        if (err) reject(err);
-        resolve(rows.map(row => row.name));
-      });
-    });
-
-    if (tables.length === 0) {
-      console.error('Error: La base de datos está vacía. Asegúrate de que Strapi esté ejecutando localmente.');
-      process.exit(1);
-    }
-
-    console.log('Tablas encontradas en la base de datos:', tables);
-    return tables;
-  } catch (error) {
-    console.error('Error al verificar tablas:', error);
-    process.exit(1);
-  }
-}
-
 // Orden de migración
 const MIGRATION_ORDER = [
   'strapi_roles',
@@ -367,7 +337,7 @@ async function migrateInOrder() {
   }
 }
 
-// Ejecutar la migración
+// Ejecutar el proceso principal
 async function main() {
   try {
     // Obtener la ruta correcta de la base de datos
