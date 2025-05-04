@@ -366,12 +366,7 @@ async function migrateInOrder() {
 // Ejecutar el proceso principal
 async function main() {
   try {
-    // Obtener la ruta correcta de la base de datos
-    const dbPath = await findDatabase();
-    console.log('Conectando a la base de datos:', dbPath);
-    const db = new sqlite3.Database(dbPath);
-
-    // Verificar tablas
+    // Verificar la base de datos
     await verifyDatabase();
 
     // Ejecutar la migración
