@@ -67,8 +67,8 @@ createTables.forEach(sql => {
   });
 });
 
-// Usar la base de datos en memoria
-const SQLITE_DB_PATH = ':memory:';
+// Usar la base de datos de Strapi
+const SQLITE_DB_PATH = path.join(__dirname, '../.tmp/data.db');
 
 // Tablas a migrar
 const TABLES = [
@@ -107,6 +107,17 @@ const TABLES = [
   'sizes'
 ];
 
+// Verificar si existe la base de datos de Strapi
+if (!fs.existsSync(SQLITE_DB_PATH)) {
+  console.error('Error: No se encontró la base de datos de Strapi en:', SQLITE_DB_PATH);
+  console.error('Por favor, asegúrate de que Strapi esté ejecutando localmente antes de ejecutar este script.');
+  process.exit(1);
+}
+
+// Conectar a la base de datos de Strapi
+const sqliteDb = new sqlite3.Database(SQLITE_DB_PATH);
+console.log('Conectado a la base de datos de Strapi:', SQLITE_DB_PATH);
+
 // Orden de migración
 const MIGRATION_ORDER = [
   'strapi_roles',
@@ -125,9 +136,19 @@ async function migrateTable(tableName) {
   try {
     console.log(`\nMigrando tabla: ${tableName}`);
     
-    // Conectar a SQLite
-    const sqliteDb = new sqlite3.Database(SQLITE_DB_PATH);
-    
+    // Verificar si la tabla existe
+    const tableExists = await new Promise((resolve, reject) => {
+      sqliteDb.get(`SELECT name FROM sqlite_master WHERE type='table' AND name=?`, [tableName], (err, row) => {
+        if (err) reject(err);
+        resolve(!!row);
+      });
+    });
+
+    if (!tableExists) {
+      console.error(`Tabla ${tableName} no existe en la base de datos de Strapi`);
+      return;
+    }
+
     // Obtener estructura de la tabla
     const columns = await new Promise((resolve, reject) => {
       sqliteDb.all(`PRAGMA table_info(${tableName})`, (err, rows) => {
@@ -139,7 +160,11 @@ async function migrateTable(tableName) {
     // Obtener datos
     const rows = await new Promise((resolve, reject) => {
       sqliteDb.all(`SELECT * FROM ${tableName}`, (err, data) => {
-        if (err) reject(err);
+        if (err) {
+          console.error(`Error obteniendo datos de ${tableName}:`, err);
+          reject(err);
+        }
+        console.log(`Encontrados ${data.length} registros`);
         resolve(data);
       });
     });
@@ -179,10 +204,16 @@ async function migrateTable(tableName) {
     try {
       // Insertar datos
       const columnNames = columns.join(', ');
+      console.log(`Columnas: ${columnNames}`);
+      
+      // Preparar los valores para la inserción
       const values = rows.map(row => 
-        columns.map(col => row[col]).map(val => 
-          typeof val === 'string' ? `'${val}'` : val
-        ).join(', ')
+        columns.map(col => {
+          const val = row[col];
+          if (val === null) return 'NULL';
+          if (typeof val === 'string') return `'${val.replace(/'/g, "''")}'`;
+          return val;
+        }).join(', ')
       );
 
       // Insertar en lotes de 100 registros
@@ -190,8 +221,15 @@ async function migrateTable(tableName) {
       for (let i = 0; i < values.length; i += batchSize) {
         const batch = values.slice(i, i + batchSize);
         const insertQuery = `INSERT INTO ${tableName} (${columnNames}) VALUES ${batch.map(v => `(${v})`).join(', ')}`;
-        await pgClient.query(insertQuery);
-        console.log(`Migrados ${batch.length} registros (lote ${Math.floor(i/batchSize) + 1})`);
+        
+        try {
+          await pgClient.query(insertQuery);
+          console.log(`Migrados ${batch.length} registros (lote ${Math.floor(i/batchSize) + 1})`);
+        } catch (error) {
+          console.error(`Error al insertar lote en ${tableName}:`, error);
+          console.error('Query fallida:', insertQuery);
+          throw error;
+        }
       }
 
       console.log(`\nVerificando migración de ${tableName}...`);
