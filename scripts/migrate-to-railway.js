@@ -3,7 +3,7 @@ const path = require('path');
 const { Client } = require('pg');
 const sqlite3 = require('sqlite3').verbose();
 
-const SQLITE_DB_PATH = path.join(__dirname, '../.tmp/data.db');
+const SQLITE_DB_PATH = ':memory:';
 
 // Tablas a migrar
 const TABLES = [
