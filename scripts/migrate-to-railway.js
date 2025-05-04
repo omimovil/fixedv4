@@ -13,8 +13,12 @@ try {
     dbPath = BACKUP_DB_PATH;
     console.log('Base de datos restaurada desde backup');
   } else {
+    console.log('No se encontró backup, creando base de datos en memoria');
+  }
+} catch (error) {
+  console.error('Error al restaurar base de datos:', error);
+}
 
-// Usar la base de datos en memoria
 // Crear la base de datos en memoria
 const sqliteDb = new sqlite3.Database(':memory:');
 
