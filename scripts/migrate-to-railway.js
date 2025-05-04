@@ -68,13 +68,8 @@ createTables.forEach(sql => {
   });
 });
 
-// Rutas posibles para la base de datos de Strapi
-const POSSIBLE_DB_PATHS = [
-  process.env.SQLITE_DB_PATH || path.join(__dirname, '../.tmp/data.db'),
-  path.join(__dirname, '../../.tmp/data.db'),
-  path.join(process.cwd(), '.tmp/data.db'),
-  path.join(process.cwd(), '../.tmp/data.db')
-];
+// Ruta fija para la base de datos de Strapi
+const SQLITE_DB_PATH = path.join(__dirname, '../.tmp/data.db');
 
 // Tablas a migrar
 const TABLES = [
@@ -116,25 +111,13 @@ const TABLES = [
 // Función para encontrar la base de datos
 async function findDatabase() {
   try {
-    // Primero intentar con la ruta especificada en el .env
-    if (process.env.SQLITE_DB_PATH) {
-      console.log('Buscando base de datos en ruta especificada en .env:', process.env.SQLITE_DB_PATH);
-      if (fs.existsSync(process.env.SQLITE_DB_PATH)) {
-        return process.env.SQLITE_DB_PATH;
-      }
+    console.log('Verificando base de datos en:', SQLITE_DB_PATH);
+    if (fs.existsSync(SQLITE_DB_PATH)) {
+      console.log('Base de datos encontrada en:', SQLITE_DB_PATH);
+      return SQLITE_DB_PATH;
     }
 
-    // Si no existe en .env, buscar en rutas por defecto
-    for (const dbPath of POSSIBLE_DB_PATHS) {
-      console.log(`Verificando base de datos en: ${dbPath}`);
-      if (fs.existsSync(dbPath)) {
-        console.log(`Base de datos encontrada en: ${dbPath}`);
-        return dbPath;
-      }
-    }
-
-    console.error('Error: No se encontró la base de datos de Strapi en ninguna de las rutas posibles.');
-    console.error('Rutas verificadas:', POSSIBLE_DB_PATHS);
+    console.error('Error: No se encontró la base de datos de Strapi en:', SQLITE_DB_PATH);
     process.exit(1);
   } catch (error) {
     console.error('Error al buscar la base de datos:', error);
