@@ -72,7 +72,6 @@ createTables.forEach(sql => {
 
 // Configurar base de datos según el entorno
 let db;
-let SQLITE_DB_PATH;
 
 if (IS_RAILWAY) {
   // En Railway, usar una base de datos en memoria
@@ -80,7 +79,7 @@ if (IS_RAILWAY) {
   db = new sqlite3.Database(':memory:');
 } else {
   // En local, usar la base de datos SQLite
-  SQLITE_DB_PATH = path.join(__dirname, '../.tmp/data.db');
+  const SQLITE_DB_PATH = path.join(__dirname, '../.tmp/data.db');
   db = new sqlite3.Database(SQLITE_DB_PATH);
   console.log('En local: usando base de datos en:', SQLITE_DB_PATH);
 }
@@ -131,7 +130,36 @@ async function verifyDatabase() {
       const createTables = [
         'CREATE TABLE strapi_users (id INTEGER PRIMARY KEY, username TEXT, email TEXT, provider TEXT, confirmed BOOLEAN, blocked BOOLEAN, role INTEGER, created_at DATETIME, updated_at DATETIME)',
         'CREATE TABLE strapi_roles (id INTEGER PRIMARY KEY, name TEXT, description TEXT, type TEXT UNIQUE, created_at DATETIME, updated_at DATETIME)',
-        // Agregar otras tablas necesarias aquí
+        'CREATE TABLE strapi_webhooks (id INTEGER PRIMARY KEY, name TEXT, url TEXT, headers TEXT, events TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE strapi_files (id INTEGER PRIMARY KEY, name TEXT, alternativeText TEXT, caption TEXT, width INTEGER, height INTEGER, formats TEXT, hash TEXT, ext TEXT, mime TEXT, size REAL, url TEXT, provider TEXT, provider_metadata TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE strapi_file_morph (id INTEGER PRIMARY KEY, strapi_file_id INTEGER, related_id INTEGER, related_type TEXT, field TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE address (id INTEGER PRIMARY KEY, customer_id INTEGER, name TEXT, address TEXT, city TEXT, state TEXT, zip_code TEXT, country_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE available_categories (id INTEGER PRIMARY KEY, name TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE brands (id INTEGER PRIMARY KEY, name TEXT, description TEXT, logo TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE categories (id INTEGER PRIMARY KEY, name TEXT, description TEXT, parent_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE colors (id INTEGER PRIMARY KEY, name TEXT, code TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE contact_addresses (id INTEGER PRIMARY KEY, name TEXT, address TEXT, city TEXT, state TEXT, zip_code TEXT, country_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE cookies (id INTEGER PRIMARY KEY, name TEXT, description TEXT, expiration INTEGER, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE cookie_categories (id INTEGER PRIMARY KEY, name TEXT, description TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE cookie_popups (id INTEGER PRIMARY KEY, title TEXT, description TEXT, accept_button_text TEXT, reject_button_text TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE customers (id INTEGER PRIMARY KEY, user_id INTEGER, first_name TEXT, last_name TEXT, email TEXT, phone TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE countries (id INTEGER PRIMARY KEY, name TEXT, code TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE delivery_dates (id INTEGER PRIMARY KEY, date DATE, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE favorite_products (id INTEGER PRIMARY KEY, customer_id INTEGER, product_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE orders (id INTEGER PRIMARY KEY, customer_id INTEGER, status TEXT, total REAL, shipping_address_id INTEGER, billing_address_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE order_products (id INTEGER PRIMARY KEY, order_id INTEGER, product_id INTEGER, quantity INTEGER, price REAL, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE payments (id INTEGER PRIMARY KEY, order_id INTEGER, amount REAL, status TEXT, payment_method_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE payment_methods (id INTEGER PRIMARY KEY, name TEXT, description TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE personal_addresses (id INTEGER PRIMARY KEY, customer_id INTEGER, name TEXT, address TEXT, city TEXT, state TEXT, zip_code TEXT, country_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT, description TEXT, price REAL, stock INTEGER, brand_id INTEGER, category_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE product_in_carts (id INTEGER PRIMARY KEY, product_id INTEGER, cart_id INTEGER, quantity INTEGER, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE purchases (id INTEGER PRIMARY KEY, product_id INTEGER, customer_id INTEGER, quantity INTEGER, price REAL, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE ratings (id INTEGER PRIMARY KEY, product_id INTEGER, customer_id INTEGER, rating INTEGER, comment TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE reviews (id INTEGER PRIMARY KEY, product_id INTEGER, customer_id INTEGER, title TEXT, content TEXT, rating INTEGER, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE shippings (id INTEGER PRIMARY KEY, order_id INTEGER, status TEXT, tracking_number TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE shipping_states (id INTEGER PRIMARY KEY, name TEXT, description TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE shopping_carts (id INTEGER PRIMARY KEY, customer_id INTEGER, status TEXT, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE sizes (id INTEGER PRIMARY KEY, name TEXT, created_at DATETIME, updated_at DATETIME)'
       ];
 
       for (const sql of createTables) {
@@ -151,6 +179,21 @@ async function verifyDatabase() {
         process.exit(1);
       }
       console.log('Base de datos encontrada en:', SQLITE_DB_PATH);
+
+      // Verificar tablas existentes
+      const tables = await new Promise((resolve, reject) => {
+        db.all(`SELECT name FROM sqlite_master WHERE type='table'`, (err, rows) => {
+          if (err) reject(err);
+          resolve(rows.map(row => row.name));
+        });
+      });
+
+      if (tables.length === 0) {
+        console.error('Error: La base de datos está vacía. Asegúrate de que Strapi esté ejecutando localmente.');
+        process.exit(1);
+      }
+
+      console.log('Tablas encontradas en la base de datos:', tables);
     }
   } catch (error) {
     console.error('Error al verificar la base de datos:', error);

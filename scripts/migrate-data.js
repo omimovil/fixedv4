@@ -17,7 +17,6 @@ class DataMigrator {
   constructor() {
     this.sqliteDb = null;
     this.pgClient = null;
-    this.config = config;
   }
 
   async init() {
@@ -67,14 +66,15 @@ class DataMigrator {
 
   async getTableStructure(tableName) {
     try {
-      return new Promise((resolve, reject) => {
+      const rows = await new Promise((resolve, reject) => {
         this.sqliteDb.all(`PRAGMA table_info(${tableName})`, (err, rows) => {
           if (err) reject(err);
-          resolve(rows.map(row => row.name));
+          resolve(rows);
         });
       });
+      return rows.map(row => row.name);
     } catch (error) {
-      console.error(`Error obteniendo estructura de ${tableName}:`, error);
+      console.error(`Error getting table structure for ${tableName}:`, error);
       throw error;
     }
   }
