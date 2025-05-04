@@ -86,14 +86,30 @@ async function migrateTable(tableName) {
 
     console.log(`Encontrados ${rows.length} registros`);
 
-    // Conectar a PostgreSQL
-    const pgClient = new Client({
+    // Verificar si estamos en Railway
+    const isRailway = process.env.DATABASE_URL && process.env.DATABASE_URL.length > 0;
+
+    if (!isRailway) {
+      console.error('Error: No se encontró la variable DATABASE_URL de Railway');
+      process.exit(1);
+    }
+
+    // Conectar a PostgreSQL usando la DATABASE_URL de Railway
+    const pgConfig = {
       connectionString: process.env.DATABASE_URL,
       ssl: {
         rejectUnauthorized: false
       }
-    });
-    await pgClient.connect();
+    };
+
+    const pgClient = new Client(pgConfig);
+    try {
+      await pgClient.connect();
+      console.log('Conexión a PostgreSQL establecida exitosamente');
+    } catch (error) {
+      console.error('Error conectando a PostgreSQL:', error);
+      process.exit(1);
+    }
 
     try {
       // Insertar datos
@@ -126,27 +142,63 @@ async function migrateTable(tableName) {
 }
 
 async function migrateInOrder() {
+  console.log('Iniciando migración en orden específico...');
+
+  // Mostrar información de la base de datos
+  console.log('\nInformación de la base de datos:');
   try {
-    console.log('Iniciando migración en orden específico...');
-    
-    // Migrar tablas principales
-    for (const table of MIGRATION_ORDER) {
-      if (TABLES.includes(table)) {
-        await migrateTable(table);
-      }
-    }
-
-    // Migrar tablas restantes
-    const remainingTables = TABLES.filter(table => !MIGRATION_ORDER.includes(table));
-    for (const table of remainingTables) {
-      await migrateTable(table);
-    }
-
-    console.log('\nMigración completada exitosamente!');
+    const sqliteDb = new sqlite3.Database(SQLITE_DB_PATH);
+    const sqliteTables = await new Promise((resolve, reject) => {
+      sqliteDb.all(`SELECT name FROM sqlite_master WHERE type='table'`, (err, tables) => {
+        if (err) reject(err);
+        resolve(tables.map(t => t.name));
+      });
+    });
+    console.log('Tablas en SQLite:', sqliteTables);
   } catch (error) {
-    console.error('Error durante la migración:', error);
-    process.exit(1);
+    console.error('Error al listar tablas:', error);
   }
+
+  // Migrar tablas en orden específico
+  for (const tableName of MIGRATION_ORDER) {
+    console.log(`\nMigrando tabla: ${tableName}`);
+    try {
+      // Verificar si la tabla existe
+      const sqliteDb = new sqlite3.Database(SQLITE_DB_PATH);
+      const tableExists = await new Promise((resolve, reject) => {
+        sqliteDb.get(`SELECT name FROM sqlite_master WHERE type='table' AND name=?`, [tableName], (err, row) => {
+          if (err) reject(err);
+          resolve(!!row);
+        });
+      });
+      
+      if (!tableExists) {
+        console.error(`Tabla ${tableName} no existe en SQLite`);
+        continue;
+      }
+
+      await migrateTable(tableName);
+      console.log(`Tabla ${tableName} migrada exitosamente`);
+    } catch (error) {
+      console.error(`Error migrando ${tableName}:`, error);
+      continue; // Continuar con la siguiente tabla aunque haya error
+    }
+  }
+
+  // Migrar tablas restantes
+  const remainingTables = TABLES.filter(table => !MIGRATION_ORDER.includes(table));
+  for (const tableName of remainingTables) {
+    console.log(`\nMigrando tabla: ${tableName}`);
+    try {
+      await migrateTable(tableName);
+      console.log(`Tabla ${tableName} migrada exitosamente`);
+    } catch (error) {
+      console.error(`Error migrando ${tableName}:`, error);
+      continue;
+    }
+  }
+
+  console.log('\nMigración completada');
 }
 
 // Ejecutar la migración
