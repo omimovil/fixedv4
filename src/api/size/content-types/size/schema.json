@@ -27,12 +27,6 @@
       "relation": "manyToMany",
       "target": "api::product.product",
       "mappedBy": "size"
-    },
-    "shopping_carts": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::shopping-cart.shopping-cart",
-      "mappedBy": "size"
     }
   }
 }

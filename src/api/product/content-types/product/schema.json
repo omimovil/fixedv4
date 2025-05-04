@@ -139,7 +139,8 @@
       },
       "type": "string",
       "required": true,
-      "unique": false
+      "unique": false,
+      "default": "Free shipping"
     },
     "condition": {
       "pluginOptions": {
@@ -242,12 +243,12 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::shopping-cart.shopping-cart",
-      "inversedBy": "product_ids",
       "pluginOptions": {
         "translate": {
           "translate": "translate"
         }
-      }
+      },
+      "inversedBy": "product_ids"
     },
     "payment_methods": {
       "type": "relation",
@@ -316,12 +317,12 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::available-categorie.available-categorie",
-      "inversedBy": "products",
       "pluginOptions": {
         "translate": {
           "translate": "translate"
         }
-      }
+      },
+      "inversedBy": "products"
     },
     "sub_categories": {
       "type": "relation",
@@ -357,12 +358,12 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::order.order",
-      "inversedBy": "products",
       "pluginOptions": {
         "translate": {
           "translate": "translate"
         }
-      }
+      },
+      "inversedBy": "products"
     },
     "shipping_state": {
       "type": "relation",
@@ -383,6 +384,81 @@
       "pluginOptions": {
         "translate": {
           "translate": "translate"
+        }
+      }
+    },
+    "rich_text": {
+      "type": "blocks",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "colors_component": {
+      "type": "dynamiczone",
+      "components": [
+        "color-category.item-colors"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "TechSpecs": {
+      "type": "dynamiczone",
+      "components": [
+        "tech-specs-category.tech-specs"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "RepairToolDetailsComponent": {
+      "type": "dynamiczone",
+      "components": [
+        "repair-tools-detail.repair-tool-details"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "ClothDetailComponent": {
+      "type": "dynamiczone",
+      "components": [
+        "cloth-details-category.cloth-details"
+      ]
+    },
+    "size_component": {
+      "type": "dynamiczone",
+      "components": [
+        "size-category.item-sizes"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "countries": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::countrie.countrie",
+      "mappedBy": "products"
+    },
+    "tags": {
+      "type": "text"
+    },
+    "country": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
         }
       }
     }

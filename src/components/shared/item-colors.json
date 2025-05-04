@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_shared_item_colors",
+  "info": {
+    "displayName": "item_colors",
+    "icon": "apps"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

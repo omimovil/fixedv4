@@ -8,7 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": false
+    "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
@@ -17,7 +17,7 @@
       "required": true,
       "unique": true
     },
-    "categoryID": {
+    "categoryId": {
       "type": "uid",
       "targetField": "name"
     },
@@ -60,14 +60,15 @@
       "mappedBy": "available_category"
     },
     "small_image": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": true
+      ]
     }
   }
 }

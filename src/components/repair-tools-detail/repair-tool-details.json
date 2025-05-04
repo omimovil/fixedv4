@@ -1,0 +1,49 @@
+{
+  "collectionName": "components_repair_tools_detail_repair_tool_details",
+  "info": {
+    "displayName": "RepairToolDetails",
+    "icon": "scissors"
+  },
+  "options": {},
+  "attributes": {
+    "toolType": {
+      "type": "string"
+    },
+    "material": {
+      "type": "string"
+    },
+    "compatibility": {
+      "type": "string"
+    },
+    "mainFunctions": {
+      "type": "string"
+    },
+    "numberOfPieces": {
+      "type": "string"
+    },
+    "tipType": {
+      "type": "string"
+    },
+    "handle": {
+      "type": "string"
+    },
+    "weight": {
+      "type": "string"
+    },
+    "certifications": {
+      "type": "string"
+    },
+    "recommendedUses": {
+      "type": "string"
+    },
+    "warranty": {
+      "type": "string"
+    },
+    "batteryLife": {
+      "type": "string"
+    },
+    "typeOfBettery": {
+      "type": "string"
+    }
+  }
+}

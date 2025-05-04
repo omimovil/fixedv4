@@ -1,0 +1,52 @@
+{
+  "collectionName": "components_tech_specs_category_tech_specs",
+  "info": {
+    "displayName": "TechSpecs",
+    "icon": "headphone"
+  },
+  "options": {},
+  "attributes": {
+    "storage": {
+      "type": "string"
+    },
+    "ram": {
+      "type": "string"
+    },
+    "processor": {
+      "type": "string"
+    },
+    "graphicsCard": {
+      "type": "string"
+    },
+    "screenSize": {
+      "type": "string"
+    },
+    "refresh_rate": {
+      "type": "string"
+    },
+    "batteryLife": {
+      "type": "string"
+    },
+    "operatingSystem": {
+      "type": "string"
+    },
+    "ports": {
+      "type": "string"
+    },
+    "weight": {
+      "type": "string"
+    },
+    "keyboardType": {
+      "type": "string"
+    },
+    "touchScreen": {
+      "type": "boolean"
+    },
+    "camera": {
+      "type": "string"
+    },
+    "countryPlugs": {
+      "type": "string"
+    }
+  }
+}

@@ -90,12 +90,6 @@
       "target": "api::address.address",
       "mappedBy": "author"
     },
-    "orders": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::order.order",
-      "mappedBy": "users_permissions_user"
-    },
     "personal_address": {
       "type": "relation",
       "relation": "oneToOne",

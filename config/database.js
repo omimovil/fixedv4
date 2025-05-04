@@ -1,7 +1,12 @@
 const path = require('path');
 
 module.exports = ({ env }) => {
-  const client = env('DATABASE_CLIENT', 'mongo');
+  // Detecta automáticamente si estamos en Railway usando la variable DATABASE_URL
+  // Asegurarse de que la variable DATABASE_URL sea una cadena válida y no undefined
+  const useRailway = env('DATABASE_URL', null) !== null && env('DATABASE_URL', '').length > 0;
+  
+  // Si estamos en Railway, usa postgres, de lo contrario usa sqlite para desarrollo local
+  const client = useRailway ? 'postgres' : 'sqlite';
 
   const connections = {
     mongo: {

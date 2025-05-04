@@ -22,19 +22,6 @@
       "target": "api::product.product",
       "mappedBy": "orders"
     },
-    "admin_users": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "admin::user"
-    },
-    "total_price": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "decimal"
-    },
     "shipping_state": {
       "type": "relation",
       "relation": "oneToOne",
@@ -42,44 +29,60 @@
       "private": true,
       "inversedBy": "order"
     },
-    "users_permissions_user": {
+    "totalPrice": {
+      "type": "decimal"
+    },
+    "shippingPrice": {
+      "type": "decimal"
+    },
+    "orderStatus": {
+      "type": "enumeration",
+      "enum": [
+        "pending, paid, cancelled, failed"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "paypalOrderId": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "title": {
+      "displayName": "ordersItems",
+      "type": "component",
+      "repeatable": false,
+      "component": "order-items.orders-items",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "options": {
+      "type": "json"
+    },
+    "payment": {
       "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "orders"
+      "relation": "oneToOne",
+      "target": "api::payment.payment",
+      "mappedBy": "order"
     },
-    "to_ship": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "boolean",
-      "default": true
-    },
-    "shipped": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "boolean"
-    },
-    "return": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "boolean"
-    },
-    "delivered": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "boolean"
+    "shipping": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::shipping.shipping",
+      "mappedBy": "order"
     }
   }
 }

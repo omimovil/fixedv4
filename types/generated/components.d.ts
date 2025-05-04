@@ -1,6 +1,6 @@
-import type { Attribute, Schema } from '@strapi/strapi';
+import type { Schema, Struct } from '@strapi/strapi';
 
-export interface CategoryCategory extends Schema.Component {
+export interface CategoryCategory extends Struct.ComponentSchema {
   collectionName: 'components_category_categories';
   info: {
     displayName: 'category';
@@ -8,17 +8,64 @@ export interface CategoryCategory extends Schema.Component {
   attributes: {};
 }
 
-export interface CategoryShoppingCart extends Schema.Component {
+export interface CategoryShoppingCart extends Struct.ComponentSchema {
   collectionName: 'components_category_shopping_carts';
   info: {
     displayName: 'ShoppingCart';
   };
   attributes: {
-    title: Attribute.String;
+    title: Schema.Attribute.String;
   };
 }
 
-export interface PfapiTypesBool extends Schema.Component {
+export interface ClothDetailsCategoryClothDetails
+  extends Struct.ComponentSchema {
+  collectionName: 'components_cloth_details_category_cloth_details';
+  info: {
+    displayName: 'ClothDetails';
+    icon: 'user';
+  };
+  attributes: {
+    careInstructions: Schema.Attribute.String;
+    colors: Schema.Attribute.String;
+    gender: Schema.Attribute.String;
+    material: Schema.Attribute.String;
+    seanson: Schema.Attribute.String;
+    Size: Schema.Attribute.String;
+    style: Schema.Attribute.String;
+    typeOfGarment: Schema.Attribute.String;
+  };
+}
+
+export interface ColorCategoryItemColors extends Struct.ComponentSchema {
+  collectionName: 'components_color_category_item_colors';
+  info: {
+    displayName: 'item_colors';
+    icon: 'apps';
+  };
+  attributes: {
+    alt_color_name: Schema.Attribute.String;
+    available: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    hex_code: Schema.Attribute.String;
+    Image_color: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    price: Schema.Attribute.Decimal;
+    quantity: Schema.Attribute.Integer;
+    stock: Schema.Attribute.Integer;
+  };
+}
+
+export interface OrderItemsOrdersItems extends Struct.ComponentSchema {
+  collectionName: 'components_order_items_orders_items';
+  info: {
+    displayName: 'ordersItems';
+  };
+  attributes: {};
+}
+
+export interface PfapiTypesBool extends Struct.ComponentSchema {
   collectionName: 'components_pfapi_types_bools';
   info: {
     description: '';
@@ -26,12 +73,12 @@ export interface PfapiTypesBool extends Schema.Component {
     icon: 'angle-right';
   };
   attributes: {
-    name: Attribute.String & Attribute.Required;
-    value: Attribute.Boolean;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    value: Schema.Attribute.Boolean;
   };
 }
 
-export interface PfapiTypesDecimal extends Schema.Component {
+export interface PfapiTypesDecimal extends Struct.ComponentSchema {
   collectionName: 'components_pfapi_types_decimals';
   info: {
     description: '';
@@ -39,12 +86,12 @@ export interface PfapiTypesDecimal extends Schema.Component {
     icon: 'angle-right';
   };
   attributes: {
-    name: Attribute.String & Attribute.Required;
-    value: Attribute.Decimal;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    value: Schema.Attribute.Decimal;
   };
 }
 
-export interface PfapiTypesInteger extends Schema.Component {
+export interface PfapiTypesInteger extends Struct.ComponentSchema {
   collectionName: 'components_pfapi_types_integers';
   info: {
     description: '';
@@ -52,12 +99,12 @@ export interface PfapiTypesInteger extends Schema.Component {
     icon: 'angle-right';
   };
   attributes: {
-    name: Attribute.String & Attribute.Required;
-    value: Attribute.Integer;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    value: Schema.Attribute.Integer;
   };
 }
 
-export interface PfapiTypesIpPrefix extends Schema.Component {
+export interface PfapiTypesIpPrefix extends Struct.ComponentSchema {
   collectionName: 'components_pfapi_types_ip_prefixes';
   info: {
     description: '';
@@ -65,15 +112,15 @@ export interface PfapiTypesIpPrefix extends Schema.Component {
     icon: 'align-left';
   };
   attributes: {
-    comment: Attribute.String;
-    ip_cidr: Attribute.String;
-    prefix: Attribute.String;
-    status: Attribute.Enumeration<['unlimited', 'blocked']> &
-      Attribute.Required;
+    comment: Schema.Attribute.String;
+    ip_cidr: Schema.Attribute.String;
+    prefix: Schema.Attribute.String;
+    status: Schema.Attribute.Enumeration<['unlimited', 'blocked']> &
+      Schema.Attribute.Required;
   };
 }
 
-export interface PfapiTypesJson extends Schema.Component {
+export interface PfapiTypesJson extends Struct.ComponentSchema {
   collectionName: 'components_pfapi_types_jsons';
   info: {
     description: '';
@@ -81,12 +128,12 @@ export interface PfapiTypesJson extends Schema.Component {
     icon: 'angle-right';
   };
   attributes: {
-    name: Attribute.String & Attribute.Required;
-    value: Attribute.JSON;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    value: Schema.Attribute.JSON;
   };
 }
 
-export interface PfapiTypesMedia extends Schema.Component {
+export interface PfapiTypesMedia extends Struct.ComponentSchema {
   collectionName: 'components_pfapi_types_media';
   info: {
     description: '';
@@ -94,12 +141,12 @@ export interface PfapiTypesMedia extends Schema.Component {
     icon: 'angle-right';
   };
   attributes: {
-    media: Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
-    name: Attribute.String & Attribute.Required;
+    media: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
-export interface PfapiTypesMultimedia extends Schema.Component {
+export interface PfapiTypesMultimedia extends Struct.ComponentSchema {
   collectionName: 'components_pfapi_types_multimedia';
   info: {
     description: '';
@@ -107,12 +154,15 @@ export interface PfapiTypesMultimedia extends Schema.Component {
     icon: 'angle-right';
   };
   attributes: {
-    media: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
-    name: Attribute.String & Attribute.Required;
+    media: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
-export interface PfapiTypesRichtext extends Schema.Component {
+export interface PfapiTypesRichtext extends Struct.ComponentSchema {
   collectionName: 'components_pfapi_types_richtexts';
   info: {
     description: '';
@@ -120,12 +170,12 @@ export interface PfapiTypesRichtext extends Schema.Component {
     icon: 'angle-right';
   };
   attributes: {
-    name: Attribute.String & Attribute.Required;
-    value: Attribute.RichText;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    value: Schema.Attribute.RichText;
   };
 }
 
-export interface PfapiTypesText extends Schema.Component {
+export interface PfapiTypesText extends Struct.ComponentSchema {
   collectionName: 'components_pfapi_types_texts';
   info: {
     description: '';
@@ -133,77 +183,154 @@ export interface PfapiTypesText extends Schema.Component {
     icon: 'angle-right';
   };
   attributes: {
-    name: Attribute.String & Attribute.Required;
-    value: Attribute.Text;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    value: Schema.Attribute.Text;
   };
 }
 
-export interface SharedCookieButton extends Schema.Component {
+export interface RepairToolsDetailRepairToolDetails
+  extends Struct.ComponentSchema {
+  collectionName: 'components_repair_tools_detail_repair_tool_details';
+  info: {
+    displayName: 'RepairToolDetails';
+    icon: 'scissors';
+  };
+  attributes: {
+    batteryLife: Schema.Attribute.String;
+    certifications: Schema.Attribute.String;
+    compatibility: Schema.Attribute.String;
+    handle: Schema.Attribute.String;
+    mainFunctions: Schema.Attribute.String;
+    material: Schema.Attribute.String;
+    numberOfPieces: Schema.Attribute.String;
+    recommendedUses: Schema.Attribute.String;
+    tipType: Schema.Attribute.String;
+    toolType: Schema.Attribute.String;
+    typeOfBettery: Schema.Attribute.String;
+    warranty: Schema.Attribute.String;
+    weight: Schema.Attribute.String;
+  };
+}
+
+export interface SharedCookieButton extends Struct.ComponentSchema {
   collectionName: 'components_shared_cookie_buttons';
   info: {
     displayName: 'Cookie Button';
   };
   attributes: {
-    buttonType: Attribute.Enumeration<['Primary', 'Secondary', 'Text']>;
-    label: Attribute.String;
+    buttonType: Schema.Attribute.Enumeration<['Primary', 'Secondary', 'Text']>;
+    label: Schema.Attribute.String;
   };
 }
 
-export interface SharedMetaSocial extends Schema.Component {
+export interface SharedItemColors extends Struct.ComponentSchema {
+  collectionName: 'components_shared_item_colors';
+  info: {
+    displayName: 'item_colors';
+    icon: 'apps';
+  };
+  attributes: {
+    name: Schema.Attribute.String;
+  };
+}
+
+export interface SharedMetaSocial extends Struct.ComponentSchema {
   collectionName: 'components_shared_meta_socials';
   info: {
     displayName: 'metaSocial';
   };
   attributes: {
-    description: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
+    description: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
         maxLength: 65;
       }>;
-    image: Attribute.Media<'images' | 'files' | 'videos'>;
-    socialNetwork: Attribute.Enumeration<['Facebook', 'Twitter']> &
-      Attribute.Required;
-    title: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos'>;
+    socialNetwork: Schema.Attribute.Enumeration<['Facebook', 'Twitter']> &
+      Schema.Attribute.Required;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
         maxLength: 60;
       }>;
   };
 }
 
-export interface SharedSeo extends Schema.Component {
+export interface SharedSeo extends Struct.ComponentSchema {
   collectionName: 'components_shared_seos';
   info: {
     displayName: 'seo';
   };
   attributes: {
-    canonicalURL: Attribute.String;
-    keywords: Attribute.Text;
-    metaDescription: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
+    canonicalURL: Schema.Attribute.String;
+    keywords: Schema.Attribute.Text;
+    metaDescription: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
         maxLength: 160;
         minLength: 50;
       }>;
-    metaImage: Attribute.Media<'images' | 'files' | 'videos'> &
-      Attribute.Required;
-    metaRobots: Attribute.String;
-    metaSocial: Attribute.Component<'shared.meta-social', true>;
-    metaTitle: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
+    metaImage: Schema.Attribute.Media<'images' | 'files' | 'videos'> &
+      Schema.Attribute.Required;
+    metaRobots: Schema.Attribute.String;
+    metaSocial: Schema.Attribute.Component<'shared.meta-social', true>;
+    metaTitle: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
         maxLength: 60;
       }>;
-    metaViewport: Attribute.String;
-    structuredData: Attribute.JSON;
+    metaViewport: Schema.Attribute.String;
+    structuredData: Schema.Attribute.JSON;
   };
 }
 
-declare module '@strapi/types' {
-  export module Shared {
-    export interface Components {
+export interface SizeCategoryItemSizes extends Struct.ComponentSchema {
+  collectionName: 'components_size_category_item_sizes';
+  info: {
+    displayName: 'item_sizes';
+    icon: 'hashtag';
+  };
+  attributes: {
+    description: Schema.Attribute.String;
+    name: Schema.Attribute.String;
+    price: Schema.Attribute.Decimal;
+    stock: Schema.Attribute.Integer;
+    weight: Schema.Attribute.Decimal;
+  };
+}
+
+export interface TechSpecsCategoryTechSpecs extends Struct.ComponentSchema {
+  collectionName: 'components_tech_specs_category_tech_specs';
+  info: {
+    displayName: 'TechSpecs';
+    icon: 'headphone';
+  };
+  attributes: {
+    batteryLife: Schema.Attribute.String;
+    camera: Schema.Attribute.String;
+    countryPlugs: Schema.Attribute.String;
+    graphicsCard: Schema.Attribute.String;
+    keyboardType: Schema.Attribute.String;
+    operatingSystem: Schema.Attribute.String;
+    ports: Schema.Attribute.String;
+    processor: Schema.Attribute.String;
+    ram: Schema.Attribute.String;
+    refresh_rate: Schema.Attribute.String;
+    screenSize: Schema.Attribute.String;
+    storage: Schema.Attribute.String;
+    touchScreen: Schema.Attribute.Boolean;
+    weight: Schema.Attribute.String;
+  };
+}
+
+declare module '@strapi/strapi' {
+  export module Public {
+    export interface ComponentSchemas {
       'category.category': CategoryCategory;
       'category.shopping-cart': CategoryShoppingCart;
+      'cloth-details-category.cloth-details': ClothDetailsCategoryClothDetails;
+      'color-category.item-colors': ColorCategoryItemColors;
+      'order-items.orders-items': OrderItemsOrdersItems;
       'pfapi-types.bool': PfapiTypesBool;
       'pfapi-types.decimal': PfapiTypesDecimal;
       'pfapi-types.integer': PfapiTypesInteger;
@@ -213,9 +340,13 @@ declare module '@strapi/types' {
       'pfapi-types.multimedia': PfapiTypesMultimedia;
       'pfapi-types.richtext': PfapiTypesRichtext;
       'pfapi-types.text': PfapiTypesText;
+      'repair-tools-detail.repair-tool-details': RepairToolsDetailRepairToolDetails;
       'shared.cookie-button': SharedCookieButton;
+      'shared.item-colors': SharedItemColors;
       'shared.meta-social': SharedMetaSocial;
       'shared.seo': SharedSeo;
+      'size-category.item-sizes': SizeCategoryItemSizes;
+      'tech-specs-category.tech-specs': TechSpecsCategoryTechSpecs;
     }
   }
 }

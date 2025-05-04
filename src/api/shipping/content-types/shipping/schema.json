@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "shippings",
+  "info": {
+    "singularName": "shipping",
+    "pluralName": "shippings",
+    "displayName": "Shipping"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "order": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::order.order",
+      "inversedBy": "shipping"
+    },
+    "shippingStatus": {
+      "type": "enumeration",
+      "enum": [
+        "pending,shipped,in_transit,delivered,returned"
+      ]
+    },
+    "trackingNumber": {
+      "type": "string"
+    },
+    "carrier": {
+      "type": "string"
+    },
+    "estimatedDelivery": {
+      "type": "datetime"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

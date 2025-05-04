@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_size_category_item_sizes",
+  "info": {
+    "displayName": "item_sizes",
+    "icon": "hashtag"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "weight": {
+      "type": "decimal"
+    },
+    "stock": {
+      "type": "integer"
+    }
+  }
+}

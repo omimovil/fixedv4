@@ -50,34 +50,11 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
     },
-    "image": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
     "brand": {
       "type": "string"
     },
     "discount": {
       "type": "decimal"
-    },
-    "color": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::color.color",
-      "inversedBy": "shopping_carts"
-    },
-    "size": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::size.size",
-      "inversedBy": "shopping_carts"
     },
     "productID": {
       "type": "string",
@@ -86,7 +63,8 @@
     },
     "sizeID": {
       "type": "string",
-      "unique": false
+      "unique": false,
+      "required": false
     },
     "colorID": {
       "type": "string",
@@ -96,10 +74,59 @@
       "type": "string"
     },
     "price": {
-      "type": "decimal"
+      "type": "decimal",
+      "required": true
     },
     "title": {
       "type": "string"
+    },
+    "costumer_id": {
+      "type": "string",
+      "required": true
+    },
+    "sku": {
+      "type": "string",
+      "required": true
+    },
+    "colorHex": {
+      "type": "string"
+    },
+    "sizeName": {
+      "type": "string"
+    },
+    "availableStock": {
+      "type": "integer"
+    },
+    "vendor": {
+      "type": "string"
+    },
+    "subTotal": {
+      "type": "decimal"
+    },
+    "totalItems": {
+      "type": "integer"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "appliedCoupon": {
+      "type": "string"
+    },
+    "discountAmount": {
+      "type": "decimal"
+    },
+    "shippingCost": {
+      "type": "decimal"
+    },
+    "estimatedTaxes": {
+      "type": "decimal"
+    },
+    "lastUpdated": {
+      "type": "datetime"
+    },
+    "imageUrl": {
+      "type": "string",
+      "required": true
     }
   }
 }

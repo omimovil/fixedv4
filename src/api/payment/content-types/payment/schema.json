@@ -4,7 +4,8 @@
   "info": {
     "singularName": "payment",
     "pluralName": "payments",
-    "displayName": "Payment"
+    "displayName": "Payment",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -15,13 +16,32 @@
     }
   },
   "attributes": {
-    "solds": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+    "order": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::order.order",
+      "inversedBy": "payment"
+    },
+    "paypalTransactionId": {
       "type": "string"
+    },
+    "payerEmail": {
+      "type": "string"
+    },
+    "amoun": {
+      "type": "decimal"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "paymentStatus": {
+      "type": "enumeration",
+      "enum": [
+        "COMPLETED,PENDING,FAILED"
+      ]
+    },
+    "rawResponse": {
+      "type": "json"
     }
   }
 }
