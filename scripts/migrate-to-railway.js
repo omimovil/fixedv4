@@ -13,13 +13,58 @@ try {
     dbPath = BACKUP_DB_PATH;
     console.log('Base de datos restaurada desde backup');
   } else {
-    console.log('No se encontró backup, creando base de datos en memoria');
-  }
-} catch (error) {
-  console.error('Error al restaurar base de datos:', error);
-}
 
-const SQLITE_DB_PATH = dbPath;
+// Usar la base de datos en memoria
+// Crear la base de datos en memoria
+const sqliteDb = new sqlite3.Database(':memory:');
+
+// Crear las tablas necesarias
+const createTables = [
+  'CREATE TABLE strapi_users (id INTEGER PRIMARY KEY, username TEXT, email TEXT, provider TEXT, confirmed BOOLEAN, blocked BOOLEAN, role INTEGER, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE strapi_roles (id INTEGER PRIMARY KEY, name TEXT, description TEXT, type TEXT UNIQUE, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE strapi_webhooks (id INTEGER PRIMARY KEY, name TEXT, url TEXT, headers TEXT, events TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE strapi_files (id INTEGER PRIMARY KEY, name TEXT, alternativeText TEXT, caption TEXT, width INTEGER, height INTEGER, formats TEXT, hash TEXT, ext TEXT, mime TEXT, size REAL, url TEXT, provider TEXT, provider_metadata TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE strapi_file_morph (id INTEGER PRIMARY KEY, related_type TEXT, related_id INTEGER, field TEXT, strapi_file_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE address (id INTEGER PRIMARY KEY, street TEXT, city TEXT, state TEXT, postalCode TEXT, country TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE available_categories (id INTEGER PRIMARY KEY, name TEXT, description TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE brands (id INTEGER PRIMARY KEY, name TEXT, description TEXT, logo TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE categories (id INTEGER PRIMARY KEY, name TEXT, description TEXT, parent_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE colors (id INTEGER PRIMARY KEY, name TEXT, code TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE contact_addresses (id INTEGER PRIMARY KEY, name TEXT, email TEXT, phone TEXT, address TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE cookies (id INTEGER PRIMARY KEY, name TEXT, description TEXT, category_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE cookie_categories (id INTEGER PRIMARY KEY, name TEXT, description TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE cookie_popups (id INTEGER PRIMARY KEY, title TEXT, description TEXT, accept_text TEXT, reject_text TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE customers (id INTEGER PRIMARY KEY, name TEXT, email TEXT, phone TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE countries (id INTEGER PRIMARY KEY, name TEXT, code TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE delivery_dates (id INTEGER PRIMARY KEY, date TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE favorite_products (id INTEGER PRIMARY KEY, customer_id INTEGER, product_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE orders (id INTEGER PRIMARY KEY, customer_id INTEGER, status TEXT, total REAL, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE order_products (id INTEGER PRIMARY KEY, order_id INTEGER, product_id INTEGER, quantity INTEGER, price REAL, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE payments (id INTEGER PRIMARY KEY, order_id INTEGER, amount REAL, status TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE payment_methods (id INTEGER PRIMARY KEY, name TEXT, description TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE personal_addresses (id INTEGER PRIMARY KEY, customer_id INTEGER, street TEXT, city TEXT, state TEXT, postalCode TEXT, country TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT, description TEXT, price REAL, stock INTEGER, category_id INTEGER, brand_id INTEGER, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE product_in_carts (id INTEGER PRIMARY KEY, product_id INTEGER, cart_id INTEGER, quantity INTEGER, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE purchases (id INTEGER PRIMARY KEY, customer_id INTEGER, product_id INTEGER, quantity INTEGER, price REAL, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE ratings (id INTEGER PRIMARY KEY, product_id INTEGER, customer_id INTEGER, rating INTEGER, comment TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE reviews (id INTEGER PRIMARY KEY, product_id INTEGER, customer_id INTEGER, title TEXT, content TEXT, rating INTEGER, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE shippings (id INTEGER PRIMARY KEY, name TEXT, description TEXT, price REAL, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE shipping_states (id INTEGER PRIMARY KEY, name TEXT, description TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE shopping_carts (id INTEGER PRIMARY KEY, customer_id INTEGER, status TEXT, created_at DATETIME, updated_at DATETIME)',
+  'CREATE TABLE sizes (id INTEGER PRIMARY KEY, name TEXT, description TEXT, created_at DATETIME, updated_at DATETIME)'
+];
+
+// Ejecutar las sentencias de creación de tablas
+createTables.forEach(sql => {
+  sqliteDb.run(sql, (err) => {
+    if (err) {
+      console.error('Error creating table:', err);
+    }
+  });
+});
+
+// Usar la base de datos en memoria
+const SQLITE_DB_PATH = ':memory:';
 
 // Tablas a migrar
 const TABLES = [

@@ -4,6 +4,12 @@ const { Client } = require('pg');
 const sqlite3 = require('sqlite3').verbose();
 const config = require('../config/migration-config');
 
+// Logger simple
+const logger = {
+  info: console.log,
+  error: console.error
+};
+
 const SQLITE_DB_PATH = path.join(__dirname, '../.tmp/data.db');
 
 // Clase para manejar la migración
@@ -68,7 +74,7 @@ class DataMigrator {
         });
       });
     } catch (error) {
-      this.logger.error(`Error obteniendo estructura de ${tableName}:`, error);
+      console.error(`Error obteniendo estructura de ${tableName}:`, error);
       throw error;
     }
   }
@@ -93,7 +99,7 @@ class DataMigrator {
       this.logger.info(`Obtenidos ${allData.length} registros de ${tableName}`);
       return allData;
     } catch (error) {
-      this.logger.error(`Error obteniendo datos de ${tableName}:`, error);
+      console.error(`Error obteniendo datos de ${tableName}:`, error);
       throw error;
     }
   }
