@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const { Client } = require('pg');
 const sqlite3 = require('sqlite3').verbose();
-const config = require('../config/migration-config');
+const migrationConfig = require('../config/migration-config');
+const config = require('./config');
 
 // Logger simple
 const logger = {
@@ -10,7 +11,8 @@ const logger = {
   error: console.error
 };
 
-const SQLITE_DB_PATH = path.join(__dirname, '../.tmp/data.db');
+// Usar la ruta de SQLite desde la configuración centralizada
+const SQLITE_DB_PATH = config.sqliteDbPath;
 
 // Clase para manejar la migración
 class DataMigrator {
@@ -29,29 +31,44 @@ class DataMigrator {
       // Conectar a SQLite
       this.sqliteDb = new sqlite3.Database(SQLITE_DB_PATH);
       
-      // Obtener la URL de PostgreSQL desde el archivo .env.migration
-      const envPath = path.join(__dirname, '../.env.migration');
-      if (!fs.existsSync(envPath)) {
-        throw new Error('No se encontró el archivo .env.migration. Asegúrate de crearlo con la URL de PostgreSQL.');
+      // Verificar si estamos en Railway o si tenemos configuración de PostgreSQL
+      if (!config.isRailway) {
+        // Si no estamos en Railway, intentar obtener la URL de PostgreSQL desde .env.migration
+        const envPath = path.join(__dirname, '../.env.migration');
+        if (!fs.existsSync(envPath)) {
+          throw new Error('No se encontró el archivo .env.migration. Asegúrate de crearlo con la URL de PostgreSQL.');
+        }
+
+        // Leer el archivo .env.migration
+        const envContent = fs.readFileSync(envPath, 'utf8');
+        const envVars = {};
+        envContent.split('\n').forEach(line => {
+          if (line.includes('=')) {
+            const [key, value] = line.split('=').map(part => part.trim());
+            envVars[key] = value;
+          }
+        });
+
+        // Verificar que tenemos la URL de PostgreSQL
+        if (!envVars.DATABASE_URL) {
+          throw new Error('No se encontró DATABASE_URL en .env.migration');
+        }
+
+        // Usar la URL de PostgreSQL del archivo .env.migration
+        var pgConfig = {
+          connectionString: envVars.DATABASE_URL,
+          ssl: {
+            rejectUnauthorized: false
+          }
+        };
+      } else {
+        // En Railway, usar la configuración centralizada
+        var pgConfig = config.pgConfig;
+        
+        if (!pgConfig || !pgConfig.connectionString) {
+          throw new Error('No se encontró la configuración de PostgreSQL. Verifica DATABASE_URL.');
+        }
       }
-
-      // Leer el archivo .env.migration
-      const envContent = fs.readFileSync(envPath, 'utf8');
-      const envVars = {};
-      envContent.split('\n').forEach(line => {
-        if (line.includes('=')) {
-          const [key, value] = line.split('=').map(part => part.trim());
-          envVars[key] = value;
-        }
-      });
-
-      // Conectar a PostgreSQL
-      const pgConfig = {
-        connectionString: envVars.DATABASE_URL,
-        ssl: {
-          rejectUnauthorized: false
-        }
-      };
 
       this.pgClient = new Client(pgConfig);
       await this.pgClient.connect();

@@ -2,21 +2,28 @@ const fs = require('fs');
 const path = require('path');
 const { Client } = require('pg');
 const sqlite3 = require('sqlite3').verbose();
+const config = require('./config');
 
-// Determinar si estamos en Railway
-const IS_RAILWAY = process.env.RAILWAY === 'true';
+// Determinar si estamos en Railway usando la configuración centralizada
+const IS_RAILWAY = config.isRailway;
 
-// Intentar restaurar la base de datos desde el backup
-const BACKUP_DB_PATH = path.join(__dirname, '../.tmp/data.db');
-let dbPath = ':memory:'; // Usar variable en lugar de constante
+// Obtener la ruta de la base de datos SQLite desde la configuración
+const SQLITE_DB_PATH = config.sqliteDbPath;
+let dbPath = IS_RAILWAY ? ':memory:' : SQLITE_DB_PATH;
 
 // Intentar restaurar la base de datos desde el backup
 try {
-  if (fs.existsSync(BACKUP_DB_PATH)) {
-    dbPath = BACKUP_DB_PATH;
-    console.log('Base de datos restaurada desde backup');
+  if (fs.existsSync(SQLITE_DB_PATH)) {
+    dbPath = SQLITE_DB_PATH;
+    console.log(`Base de datos restaurada desde: ${SQLITE_DB_PATH}`);
   } else {
-    console.log('No se encontró backup, creando base de datos en memoria');
+    console.log(`No se encontró la base de datos en: ${SQLITE_DB_PATH}, creando base de datos en memoria`);
+    // Crear el directorio si no existe
+    const dir = path.dirname(SQLITE_DB_PATH);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+      console.log(`Directorio creado: ${dir}`);
+    }
   }
 } catch (error) {
   console.error('Error al restaurar base de datos:', error);
@@ -348,21 +355,19 @@ async function migrateTable(tableName) {
 
     console.log(`Encontrados ${rows.length} registros`);
 
-    // Verificar si estamos en Railway
-    const isRailway = process.env.DATABASE_URL && process.env.DATABASE_URL.length > 0;
-
-    if (!isRailway) {
-      console.error('Error: No se encontró la variable DATABASE_URL de Railway');
+    // Verificar si estamos en Railway usando la configuración centralizada
+    if (!config.isRailway) {
+      console.error('Error: No se detectó el entorno de Railway. Asegúrate de que DATABASE_URL esté configurado.');
       process.exit(1);
     }
 
-    // Conectar a PostgreSQL usando la DATABASE_URL de Railway
-    const pgConfig = {
-      connectionString: process.env.DATABASE_URL,
-      ssl: {
-        rejectUnauthorized: false
-      }
-    };
+    // Conectar a PostgreSQL usando la configuración centralizada
+    const pgConfig = config.pgConfig;
+    
+    if (!pgConfig || !pgConfig.connectionString) {
+      console.error('Error: No se encontró la configuración de PostgreSQL. Verifica DATABASE_URL.');
+      process.exit(1);
+    }
 
     const pgClient = new Client(pgConfig);
     try {

@@ -2,4 +2,4 @@
 command = "npm install && npm run migrate"
 
 [deploy]
-command = "npm install && npm run migrate"
+command = "npm install && npm run migrate && npm run start"
