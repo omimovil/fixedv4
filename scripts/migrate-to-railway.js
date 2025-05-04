@@ -142,6 +142,7 @@ async function migrateTable(tableName) {
 }
 
 async function migrateInOrder() {
+  console.log('=== INICIANDO MIGRACIÓN DE DATOS ===');
   console.log('Iniciando migración en orden específico...');
 
   // Mostrar información de la base de datos
