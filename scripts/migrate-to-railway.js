@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { Client } = require('pg');
 const sqlite3 = require('sqlite3').verbose();
+require('dotenv').config();
 
 // Intentar restaurar la base de datos desde el backup
 const BACKUP_DB_PATH = path.join(__dirname, '../.tmp/data.db');
@@ -69,7 +70,7 @@ createTables.forEach(sql => {
 
 // Rutas posibles para la base de datos de Strapi
 const POSSIBLE_DB_PATHS = [
-  path.join(__dirname, '../.tmp/data.db'),
+  process.env.SQLITE_DB_PATH || path.join(__dirname, '../.tmp/data.db'),
   path.join(__dirname, '../../.tmp/data.db'),
   path.join(process.cwd(), '.tmp/data.db'),
   path.join(process.cwd(), '../.tmp/data.db')
@@ -115,6 +116,15 @@ const TABLES = [
 // Función para encontrar la base de datos
 async function findDatabase() {
   try {
+    // Primero intentar con la ruta especificada en el .env
+    if (process.env.SQLITE_DB_PATH) {
+      console.log('Buscando base de datos en ruta especificada en .env:', process.env.SQLITE_DB_PATH);
+      if (fs.existsSync(process.env.SQLITE_DB_PATH)) {
+        return process.env.SQLITE_DB_PATH;
+      }
+    }
+
+    // Si no existe en .env, buscar en rutas por defecto
     for (const dbPath of POSSIBLE_DB_PATHS) {
       console.log(`Verificando base de datos en: ${dbPath}`);
       if (fs.existsSync(dbPath)) {
