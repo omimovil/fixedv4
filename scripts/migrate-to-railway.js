@@ -3,7 +3,23 @@ const path = require('path');
 const { Client } = require('pg');
 const sqlite3 = require('sqlite3').verbose();
 
-const SQLITE_DB_PATH = ':memory:';
+// Intentar restaurar la base de datos desde el backup
+const BACKUP_DB_PATH = path.join(__dirname, '../.tmp/data.db');
+let dbPath = ':memory:'; // Usar variable en lugar de constante
+
+// Intentar restaurar la base de datos desde el backup
+try {
+  if (fs.existsSync(BACKUP_DB_PATH)) {
+    dbPath = BACKUP_DB_PATH;
+    console.log('Base de datos restaurada desde backup');
+  } else {
+    console.log('No se encontró backup, creando base de datos en memoria');
+  }
+} catch (error) {
+  console.error('Error al restaurar base de datos:', error);
+}
+
+const SQLITE_DB_PATH = dbPath;
 
 // Tablas a migrar
 const TABLES = [
