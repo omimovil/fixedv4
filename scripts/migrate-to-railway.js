@@ -71,17 +71,34 @@ createTables.forEach(sql => {
 });
 
 // Configurar base de datos según el entorno
-let db;
-
-if (IS_RAILWAY) {
-  // En Railway, usar una base de datos en memoria
-  console.log('En Railway: usando base de datos en memoria');
-  db = new sqlite3.Database(':memory:');
-} else {
-  // En local, usar la base de datos SQLite
-  const SQLITE_DB_PATH = path.join(__dirname, '../.tmp/data.db');
+async function main() {
+  try {
+    if (IS_RAILWAY) {
+      // En Railway, solo necesitamos crear la base de datos en memoria
+      console.log('En Railway: inicializando base de datos en memoria');
+      db = new sqlite3.Database(':memory:');
+      await verifyDatabase();
+      await migrateData(db);
+    } else {
+      // En local, verificar y usar la base de datos existente
+      const dbPath = path.join(__dirname, '../.tmp/data.db');
+      console.log('En local: usando base de datos en:', dbPath);
+      
+      // Verificar y crear el directorio si no existe
+      const dir = path.dirname(dbPath);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      
+      db = new sqlite3.Database(dbPath);
+      await verifyDatabase();
+      await migrateData(db);
+    }
+  } catch (error) {
+    console.error('Error inicializando la base de datos:', error);
+    process.exit(1);
+  }
   db = new sqlite3.Database(SQLITE_DB_PATH);
-  console.log('En local: usando base de datos en:', SQLITE_DB_PATH);
 }
 
 // Tablas a migrar
