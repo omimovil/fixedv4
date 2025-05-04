@@ -67,8 +67,13 @@ createTables.forEach(sql => {
   });
 });
 
-// Usar la base de datos de Strapi
-const SQLITE_DB_PATH = path.join(__dirname, '../.tmp/data.db');
+// Rutas posibles para la base de datos de Strapi
+const POSSIBLE_DB_PATHS = [
+  path.join(__dirname, '../.tmp/data.db'),
+  path.join(__dirname, '../../.tmp/data.db'),
+  path.join(process.cwd(), '.tmp/data.db'),
+  path.join(process.cwd(), '../.tmp/data.db')
+];
 
 // Tablas a migrar
 const TABLES = [
@@ -107,20 +112,62 @@ const TABLES = [
   'sizes'
 ];
 
+// Función para encontrar la base de datos
+async function findDatabase() {
+  try {
+    for (const dbPath of POSSIBLE_DB_PATHS) {
+      console.log(`Verificando base de datos en: ${dbPath}`);
+      if (fs.existsSync(dbPath)) {
+        console.log(`Base de datos encontrada en: ${dbPath}`);
+        return dbPath;
+      }
+    }
+
+    console.error('Error: No se encontró la base de datos de Strapi en ninguna de las rutas posibles.');
+    console.error('Rutas verificadas:', POSSIBLE_DB_PATHS);
+    process.exit(1);
+  } catch (error) {
+    console.error('Error al buscar la base de datos:', error);
+    process.exit(1);
+  }
+}
+
+// Verificar si existe la base de datos de Strapi
+async function verifyDatabase() {
+  try {
+    const dbPath = await findDatabase();
+    const db = new sqlite3.Database(dbPath);
+
+    const tables = await new Promise((resolve, reject) => {
+      db.all(`SELECT name FROM sqlite_master WHERE type='table'`, (err, rows) => {
+        if (err) reject(err);
+        resolve(rows.map(row => row.name));
+      });
+    });
+
+    if (tables.length === 0) {
+      console.error('Error: La base de datos está vacía. Asegúrate de que Strapi esté ejecutando localmente.');
+      process.exit(1);
+    }
+
+    console.log('Tablas encontradas en la base de datos:', tables);
+    return tables;
+  } catch (error) {
+    console.error('Error al verificar tablas:', error);
+    process.exit(1);
+  }
+}
+
 // Verificar si existe la base de datos de Strapi
 if (!fs.existsSync(SQLITE_DB_PATH)) {
   console.error('Error: No se encontró la base de datos de Strapi en:', SQLITE_DB_PATH);
   console.error('Por favor, asegúrate de que Strapi esté ejecutando localmente antes de ejecutar este script.');
   process.exit(1);
-}
-
-// Conectar a la base de datos de Strapi
-const db = new sqlite3.Database(SQLITE_DB_PATH);
-console.log('Conectado a la base de datos de Strapi:', SQLITE_DB_PATH);
-
-// Verificar si la base de datos está vacía
 async function verifyDatabase() {
   try {
+    const dbPath = await findDatabase();
+    const db = new sqlite3.Database(dbPath);
+
     const tables = await new Promise((resolve, reject) => {
       db.all(`SELECT name FROM sqlite_master WHERE type='table'`, (err, rows) => {
         if (err) reject(err);
@@ -321,4 +368,23 @@ async function migrateInOrder() {
 }
 
 // Ejecutar la migración
-migrateInOrder();
+async function main() {
+  try {
+    // Obtener la ruta correcta de la base de datos
+    const dbPath = await findDatabase();
+    console.log('Conectando a la base de datos:', dbPath);
+    const db = new sqlite3.Database(dbPath);
+
+    // Verificar tablas
+    await verifyDatabase();
+
+    // Ejecutar la migración
+    await migrateInOrder();
+  } catch (error) {
+    console.error('Error en el proceso principal:', error);
+    process.exit(1);
+  }
+}
+
+// Ejecutar el proceso principal
+main();
