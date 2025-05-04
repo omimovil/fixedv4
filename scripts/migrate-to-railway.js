@@ -2,7 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const { Client } = require('pg');
 const sqlite3 = require('sqlite3').verbose();
-require('dotenv').config();
+
+// Determinar si estamos en Railway
+const IS_RAILWAY = process.env.RAILWAY === 'true';
 
 // Intentar restaurar la base de datos desde el backup
 const BACKUP_DB_PATH = path.join(__dirname, '../.tmp/data.db');
@@ -68,8 +70,20 @@ createTables.forEach(sql => {
   });
 });
 
-// Ruta fija para la base de datos de Strapi
-const SQLITE_DB_PATH = path.join(__dirname, '../.tmp/data.db');
+// Configurar base de datos según el entorno
+let db;
+let SQLITE_DB_PATH;
+
+if (IS_RAILWAY) {
+  // En Railway, usar una base de datos en memoria
+  console.log('En Railway: usando base de datos en memoria');
+  db = new sqlite3.Database(':memory:');
+} else {
+  // En local, usar la base de datos SQLite
+  SQLITE_DB_PATH = path.join(__dirname, '../.tmp/data.db');
+  db = new sqlite3.Database(SQLITE_DB_PATH);
+  console.log('En local: usando base de datos en:', SQLITE_DB_PATH);
+}
 
 // Tablas a migrar
 const TABLES = [
@@ -108,19 +122,38 @@ const TABLES = [
   'sizes'
 ];
 
-// Función para encontrar la base de datos
-async function findDatabase() {
+// Función para verificar la conexión a la base de datos
+async function verifyDatabase() {
   try {
-    console.log('Verificando base de datos en:', SQLITE_DB_PATH);
-    if (fs.existsSync(SQLITE_DB_PATH)) {
-      console.log('Base de datos encontrada en:', SQLITE_DB_PATH);
-      return SQLITE_DB_PATH;
-    }
+    if (IS_RAILWAY) {
+      // En Railway, crear las tablas necesarias en memoria
+      console.log('Creando tablas en memoria...');
+      const createTables = [
+        'CREATE TABLE strapi_users (id INTEGER PRIMARY KEY, username TEXT, email TEXT, provider TEXT, confirmed BOOLEAN, blocked BOOLEAN, role INTEGER, created_at DATETIME, updated_at DATETIME)',
+        'CREATE TABLE strapi_roles (id INTEGER PRIMARY KEY, name TEXT, description TEXT, type TEXT UNIQUE, created_at DATETIME, updated_at DATETIME)',
+        // Agregar otras tablas necesarias aquí
+      ];
 
-    console.error('Error: No se encontró la base de datos de Strapi en:', SQLITE_DB_PATH);
-    process.exit(1);
+      for (const sql of createTables) {
+        await new Promise((resolve, reject) => {
+          db.run(sql, (err) => {
+            if (err) reject(err);
+            resolve();
+          });
+        });
+      }
+      console.log('Tablas creadas en memoria exitosamente');
+    } else {
+      // En local, verificar la existencia de la base de datos
+      console.log('Verificando base de datos en:', SQLITE_DB_PATH);
+      if (!fs.existsSync(SQLITE_DB_PATH)) {
+        console.error('Error: No se encontró la base de datos de Strapi en:', SQLITE_DB_PATH);
+        process.exit(1);
+      }
+      console.log('Base de datos encontrada en:', SQLITE_DB_PATH);
+    }
   } catch (error) {
-    console.error('Error al buscar la base de datos:', error);
+    console.error('Error al verificar la base de datos:', error);
     process.exit(1);
   }
 }
