@@ -8,7 +8,8 @@
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi",
-    "deploy": "strapi deploy"
+    "deploy": "strapi deploy",
+    "migrate": "node scripts/migrate-to-railway.js"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.11.3",
@@ -21,6 +22,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.0.0",
+    "sqlite3": "^5.1.7",
     "strapi-plugin-strapi-algolia": "^2.0.3",
     "styled-components": "^6.0.0"
   },
