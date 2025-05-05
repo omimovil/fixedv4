@@ -11,7 +11,7 @@ COPY . .
 RUN mkdir -p .tmp
 
 # Intentar copiar la base de datos SQLite si existe
-COPY .tmp/data.db* .tmp/ 2>/dev/null || echo "No se encontró la base de datos SQLite, continuando..."
+COPY .tmp/data.db* .tmp/ 2>/dev/null || echo 'No se encontró la base de datos SQLite, continuando...'
 
 # Asegurar que el directorio de la base de datos tenga permisos correctos
 RUN chmod -R 755 .tmp
