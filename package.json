@@ -10,8 +10,9 @@
     "strapi": "strapi",
     "deploy": "strapi deploy",
     "init-railway": "node scripts/init-railway.js",
-    "migrate": "node scripts/init-railway.js && node scripts/migrate-to-railway.js",
-    "railway:build": "npm run migrate && npm run build"
+    "migrate": "node scripts/init-railway.js && node scripts/railway-migrate.js && node scripts/migrate-to-railway.js",
+    "railway:build": "npm run migrate && npm run build",
+    "migrate-local": "node scripts/migrate-data.js"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.11.3",
