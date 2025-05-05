@@ -11,8 +11,8 @@ COPY . .
 RUN mkdir -p .tmp
 
 # Intentar copiar la base de datos SQLite si existe
-# Nota: Simplificado para evitar problemas con la sintaxis de shell en Docker
-COPY .tmp/data.db* .tmp/ 2>/dev/null || true
+# Nota: Eliminada la redirección que causaba problemas en Docker
+COPY .tmp/data.db* .tmp/ || echo "No database files to copy"
 
 # Asegurar que el directorio de la base de datos tenga permisos correctos
 RUN chmod -R 755 .tmp
