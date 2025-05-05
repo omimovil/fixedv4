@@ -1,4 +1,4 @@
- module.exports = [
+module.exports = [
   'strapi::errors',
   // {
   //   name: 'strapi::cors',
@@ -12,7 +12,7 @@
   {
     name: 'strapi::cors',
     config: {
-      origin: ['http://localhost:3000', process.env.FRONTEND_URL_TUNNEL], // Agrega los dominios permitidos
+      origin: ['http://localhost:3000', process.env.FRONTEND_URL_TUNNEL, '*'], // Permitir cualquier origen en producción
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       headers: ['Content-Type', 'Authorization'],
       credentials: true,

@@ -6,11 +6,12 @@
   "scripts": {
     "develop": "strapi develop",
     "start": "strapi start",
-    "build": "npm run migrate && strapi build",
+    "build": "strapi build",
     "strapi": "strapi",
     "deploy": "strapi deploy",
     "init-railway": "node scripts/init-railway.js",
-    "migrate": "node scripts/init-railway.js && node scripts/migrate-to-railway.js"
+    "migrate": "node scripts/init-railway.js && node scripts/migrate-to-railway.js",
+    "railway:build": "npm run migrate && npm run build"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.11.3",
