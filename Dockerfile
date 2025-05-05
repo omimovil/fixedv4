@@ -12,7 +12,8 @@ RUN mkdir -p .tmp
 
 # Intentar copiar la base de datos SQLite si existe
 # Nota: Usando una sintaxis compatible con Docker
-COPY .tmp/data.db* .tmp/ 2>/dev/null || true
+# Eliminada la redirección que causaba problemas en Railway
+COPY .tmp/data.db* .tmp/ || echo "No database files to copy"
 
 # Asegurar que el directorio de la base de datos tenga permisos correctos
 RUN chmod -R 755 .tmp
