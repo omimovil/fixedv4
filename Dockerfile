@@ -11,6 +11,8 @@ COPY . .
 RUN mkdir -p .tmp && chmod -R 755 .tmp
 
 # Construir la aplicación antes de iniciarla en producción
+# Usar NODE_OPTIONS para evitar problemas con SWC
+ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN npm run build
 
 EXPOSE 1337
