@@ -1,0 +1,36 @@
+const TABLE_MAPPING = {
+  // Tablas de Strapi
+  'strapi_roles': 'strapi_roles',
+  'strapi_users': 'strapi_users',
+  'strapi_webhooks': 'strapi_webhooks',
+  'strapi_files': 'strapi_files',
+  'strapi_file_morph': 'strapi_file_morph',
+  
+  // Nuestras tablas
+  'address': 'address',
+  'available_categories': 'available_categories',
+  'brands': 'brands',
+  'categories': 'categories',
+  'colors': 'colors',
+  'contact_addresses': 'contact_addresses',
+  'cookies': 'cookies',
+  'cookie_categories': 'cookie_categories',
+  'cookie_popups': 'cookie_popups',
+  'customers': 'customers',
+  'countries': 'countries',
+  'delivery_dates': 'delivery_dates',
+  'favorite_products': 'favorite_products',
+  'orders': 'orders',
+  'payment_methods': 'payment_methods',
+  'payments': 'payments',
+  'personal_addresses': 'personal_addresses',
+  'product_in_cart': 'product_in_cart',
+  'products': 'products',
+  'purchases': 'purchases',
+  'ratings': 'ratings',
+  'reviews': 'reviews',
+  'shipping': 'shipping',
+  'shipping_states': 'shipping_states',
+  'shopping_carts': 'shopping_carts',
+  'sizes': 'sizes'
+};

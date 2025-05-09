@@ -1,0 +1,13 @@
+{
+  "columns": [
+    "id",
+    "street",
+    "city",
+    "state",
+    "postal_code",
+    "country",
+    "created_at",
+    "updated_at"
+  ],
+  "data": []
+}

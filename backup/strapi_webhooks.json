@@ -1,0 +1,13 @@
+{
+  "columns": [
+    "id",
+    "name",
+    "url",
+    "headers",
+    "events",
+    "enabled",
+    "created_at",
+    "updated_at"
+  ],
+  "data": []
+}

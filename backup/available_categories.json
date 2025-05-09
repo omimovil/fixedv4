@@ -1,0 +1,102 @@
+{
+  "columns": [
+    "id",
+    "name",
+    "category_id",
+    "created_at",
+    "updated_at",
+    "created_by_id",
+    "updated_by_id",
+    "slug",
+    "description",
+    "document_id",
+    "locale",
+    "published_at"
+  ],
+  "data": [
+    {
+      "id": 1,
+      "name": "Technology",
+      "category_id": null,
+      "created_at": "2024-01-08T04:11:56.733Z",
+      "updated_at": "2025-03-15T09:52:37.996Z",
+      "created_by_id": 1,
+      "updated_by_id": 1,
+      "slug": "technology",
+      "description": "\nHome and Kitchen: This category encompasses a wide range of products and appliances designed for household ",
+      "document_id": null,
+      "locale": null,
+      "published_at": "2025-03-21T00:26:31.011Z"
+    },
+    {
+      "id": 3,
+      "name": "Beauty and fashion",
+      "category_id": null,
+      "created_at": "2024-01-08T04:15:27.184Z",
+      "updated_at": "2025-03-15T10:14:12.117Z",
+      "created_by_id": 1,
+      "updated_by_id": 1,
+      "slug": "beauty-and-fashion",
+      "description": "\nHome and Kitchen: This category encompasses a wide range of products and appliances designed for household ",
+      "document_id": null,
+      "locale": null,
+      "published_at": "2025-03-21T00:26:31.011Z"
+    },
+    {
+      "id": 5,
+      "name": "Home and kitchen",
+      "category_id": null,
+      "created_at": "2024-01-08T04:13:59.551Z",
+      "updated_at": "2025-03-15T09:52:01.943Z",
+      "created_by_id": 1,
+      "updated_by_id": 1,
+      "slug": "home-and-kitchen-1",
+      "description": "\nHome and Kitchen: This category encompasses a wide range of products and appliances designed for household ",
+      "document_id": null,
+      "locale": null,
+      "published_at": null
+    },
+    {
+      "id": 6,
+      "name": "Health care",
+      "category_id": null,
+      "created_at": "2024-01-08T04:17:25.946Z",
+      "updated_at": "2025-03-15T10:07:42.647Z",
+      "created_by_id": 1,
+      "updated_by_id": 1,
+      "slug": "health-care",
+      "description": "\nHome and Kitchen: This category encompasses a wide range of products and appliances designed for household ",
+      "document_id": null,
+      "locale": null,
+      "published_at": null
+    },
+    {
+      "id": 7,
+      "name": "Technology",
+      "category_id": null,
+      "created_at": "2024-01-08T04:11:56.733Z",
+      "updated_at": "2025-03-15T09:52:37.996Z",
+      "created_by_id": 1,
+      "updated_by_id": 1,
+      "slug": "technology",
+      "description": "\nHome and Kitchen: This category encompasses a wide range of products and appliances designed for household ",
+      "document_id": null,
+      "locale": null,
+      "published_at": null
+    },
+    {
+      "id": 8,
+      "name": "Beauty and fashion",
+      "category_id": null,
+      "created_at": "2024-01-08T04:15:27.184Z",
+      "updated_at": "2025-03-15T10:14:12.117Z",
+      "created_by_id": 1,
+      "updated_by_id": 1,
+      "slug": "beauty-and-fashion",
+      "description": "\nHome and Kitchen: This category encompasses a wide range of products and appliances designed for household ",
+      "document_id": null,
+      "locale": null,
+      "published_at": null
+    }
+  ]
+}

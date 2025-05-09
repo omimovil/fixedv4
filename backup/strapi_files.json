@@ -1,0 +1,22 @@
+{
+  "columns": [
+    "id",
+    "name",
+    "alternativetext",
+    "caption",
+    "width",
+    "height",
+    "formats",
+    "hash",
+    "ext",
+    "mime",
+    "size",
+    "url",
+    "previewurl",
+    "provider",
+    "provider_metadata",
+    "created_at",
+    "updated_at"
+  ],
+  "data": []
+}

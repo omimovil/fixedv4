@@ -1,0 +1,12 @@
+{
+  "columns": [
+    "id",
+    "model_name",
+    "model_id",
+    "field",
+    "file",
+    "created_at",
+    "updated_at"
+  ],
+  "data": []
+}
