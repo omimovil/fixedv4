@@ -28,7 +28,7 @@ DATABASE_PASSWORD = "${DATABASE_PASSWORD:-strapi}"
 DATABASE_SCHEMA = "public"
 
 # Configuración de URLs
-RAILWAY_STATIC_URL = "${RAILWAY_STATIC_URL:-http://localhost:${PORT}}"
+PUBLIC_URL = "${PUBLIC_URL:-http://localhost:${PORT}}"
 
 # Configuración de pool de conexiones
 DATABASE_POOL_MIN = "0"
@@ -48,7 +48,3 @@ NODE_OPTIONS = "--max-old-space-size=400 --optimize-for-size --max-semi-space-si
 
 # Tiempo de inicio
 RAILWAY_STARTUP_TIMEOUT = "60"
-
-# Configuración adicional para producción
-RAILWAY_STATIC_URL = "https://fixedv4-production-16eb.up.railway.app"
-PUBLIC_URL = "https://fixedv4-production-16eb.up.railway.app"
