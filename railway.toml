@@ -27,9 +27,6 @@ DATABASE_USERNAME = "${DATABASE_USERNAME:-strapi}"
 DATABASE_PASSWORD = "${DATABASE_PASSWORD:-strapi}"
 DATABASE_SCHEMA = "public"
 
-# Configuración de URLs
-PUBLIC_URL = "${PUBLIC_URL:-http://localhost:${PORT}}"
-
 # Configuración de pool de conexiones
 DATABASE_POOL_MIN = "0"
 DATABASE_POOL_MAX = "2"
