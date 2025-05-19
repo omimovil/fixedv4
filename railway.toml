@@ -1,5 +1,8 @@
 [build]
-command = "npm install && NODE_OPTIONS=--openssl-legacy-provider npm run migrate && NODE_OPTIONS=--openssl-legacy-provider npm run build"
+builder = "nixpacks"
+command = "npm run build"
 
 [deploy]
-command = "npm install && npm run start"
+startCommand = "npm run start"
+healthcheckPath = "/admin"
+healthcheckTimeout = 300
