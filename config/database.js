@@ -102,12 +102,14 @@ module.exports = ({ env }) => {
   if (env('RAILWAY_ENVIRONMENT')) {
     config.connection.pool = {
       min: 0,
-      max: 5,
-      createTimeoutMillis: 30000,
-      acquireTimeoutMillis: 30000,
-      idleTimeoutMillis: 30000,
-      reapIntervalMillis: 1000,
-      createRetryIntervalMillis: 100,
+      max: 3, // Reducir el número máximo de conexiones
+      createTimeoutMillis: 10000, // Reducir timeout
+      acquireTimeoutMillis: 10000, // Reducir timeout
+      idleTimeoutMillis: 15000, // Reducir timeout
+      reapIntervalMillis: 5000, // Aumentar intervalo de limpieza
+      createRetryIntervalMillis: 500, // Reducir intervalo de reintentos
+      evict: true, // Habilitar evicción de conexiones inactivas
+      maxUses: 1000 // Limite de usos por conexión
     };
   }
 

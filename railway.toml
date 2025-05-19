@@ -5,16 +5,19 @@ command = "npm run build"
 [deploy]
 startCommand = "npm run start"
 healthcheckPath = "/admin"
-healthcheckTimeout = 30
-healthcheckInterval = 10
+healthcheckTimeout = 10
+healthcheckInterval = 5
 restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
 
 [env]
 NODE_ENV = "production"
 STRAPI_TELEMETRY_DISABLED = "true"
 DATABASE_SSL = "true"
 DATABASE_SSL_REJECT_UNAUTHORIZED = "false"
-DATABASE_POOL_MIN = "2"
-DATABASE_POOL_MAX = "5"
 APP_URL = "https://fixedv4-production-16eb.up.railway.app"
 ADMIN_URL = "https://fixedv4-production-16eb.up.railway.app/admin"
+
+# Optimizaciones de memoria
+MEMORY_LIMIT = "512MB"
+NODE_OPTIONS = "--max-old-space-size=400 --optimize-for-size --max-semi-space-size=100"
