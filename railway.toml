@@ -6,3 +6,10 @@ command = "npm run build"
 startCommand = "npm run start"
 healthcheckPath = "/admin"
 healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+
+[env]
+NODE_ENV = "production"
+STRAPI_TELEMETRY_DISABLED = "true"
+DATABASE_SSL = "true"
+DATABASE_SSL_REJECT_UNAUTHORIZED = "false"

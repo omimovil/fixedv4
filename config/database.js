@@ -90,11 +90,26 @@ module.exports = ({ env }) => {
     },
   };
 
-  return {
+  const config = {
     connection: {
       client,
       ...connections[client],
       acquireConnectionTimeout: env.int('DATABASE_CONNECTION_TIMEOUT', 60000),
     },
   };
+
+  // Configuración específica para Railway
+  if (env('RAILWAY_ENVIRONMENT')) {
+    config.connection.pool = {
+      min: 0,
+      max: 5,
+      createTimeoutMillis: 30000,
+      acquireTimeoutMillis: 30000,
+      idleTimeoutMillis: 30000,
+      reapIntervalMillis: 1000,
+      createRetryIntervalMillis: 100,
+    };
+  }
+
+  return config;
 };
