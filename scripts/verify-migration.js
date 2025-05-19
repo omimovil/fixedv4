@@ -3,7 +3,12 @@ const { Client } = require('pg');
 async function verifyMigration() {
   try {
     const client = new Client({
-      connectionString: process.env.DATABASE_URL,
+      user: 'postgres',
+      host: 'localhost',
+      database: 'fixedv4',
+      password: 'ominey',
+      port: 5432,
+      ssl: false
     });
 
     await client.connect();
