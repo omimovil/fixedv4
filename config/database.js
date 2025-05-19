@@ -102,14 +102,28 @@ module.exports = ({ env }) => {
   if (env('RAILWAY_ENVIRONMENT')) {
     config.connection.pool = {
       min: 0,
-      max: 3, // Reducir el número máximo de conexiones
-      createTimeoutMillis: 10000, // Reducir timeout
-      acquireTimeoutMillis: 10000, // Reducir timeout
-      idleTimeoutMillis: 15000, // Reducir timeout
-      reapIntervalMillis: 5000, // Aumentar intervalo de limpieza
-      createRetryIntervalMillis: 500, // Reducir intervalo de reintentos
-      evict: true, // Habilitar evicción de conexiones inactivas
-      maxUses: 1000 // Limite de usos por conexión
+      max: 2, // Reducir aún más las conexiones
+      createTimeoutMillis: 30000, // Aumentar timeout
+      acquireTimeoutMillis: 30000, // Aumentar timeout
+      idleTimeoutMillis: 30000, // Aumentar timeout
+      reapIntervalMillis: 10000, // Aumentar intervalo de limpieza
+      createRetryIntervalMillis: 1000, // Aumentar intervalo de reintentos
+      evict: true,
+      maxUses: 500, // Reducir límite de usos
+      connectionTimeoutMillis: 30000, // Aumentar timeout de conexión
+      requestTimeoutMillis: 30000, // Aumentar timeout de solicitud
+      max: 2, // Reducir máximo de conexiones
+      min: 0, // Mantener mínimo en 0
+      acquire: {
+        timeout: 30000
+      },
+      create: {
+        timeout: 30000
+      }
+    };
+    config.connection.connectionString = env('DATABASE_URL'); // Usar la URL completa
+    config.connection.ssl = {
+      rejectUnauthorized: false // Deshabilitar verificación SSL
     };
   }
 

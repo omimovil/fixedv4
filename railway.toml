@@ -18,6 +18,13 @@ DATABASE_SSL_REJECT_UNAUTHORIZED = "false"
 APP_URL = "https://fixedv4-production-16eb.up.railway.app"
 ADMIN_URL = "/admin"
 
+# Configuración de base de datos
+DATABASE_CONNECTION_TIMEOUT = "60000"
+DATABASE_POOL_MIN = "0"
+DATABASE_POOL_MAX = "2"
+DATABASE_POOL_TIMEOUT = "30000"
+DATABASE_POOL_IDLE_TIMEOUT = "30000"
+
 # Optimizaciones de memoria
 MEMORY_LIMIT = "512MB"
 NODE_OPTIONS = "--max-old-space-size=400 --optimize-for-size --max-semi-space-size=100"
