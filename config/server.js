@@ -9,5 +9,6 @@ module.exports = ({ env }) => ({
 
   admin: {
     path: '/admin',
+    url: env('RAILWAY_STATIC_URL')
   },
 });
