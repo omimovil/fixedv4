@@ -15,6 +15,7 @@ NODE_ENV = "production"
 STRAPI_TELEMETRY_DISABLED = "true"
 DATABASE_SSL = "true"
 DATABASE_SSL_REJECT_UNAUTHORIZED = "false"
+PUBLIC_URL = "https://fixedv4-production-16eb.up.railway.app"
 APP_URL = "https://fixedv4-production-16eb.up.railway.app"
 ADMIN_URL = "https://fixedv4-production-16eb.up.railway.app/admin"
 
