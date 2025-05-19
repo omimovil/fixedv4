@@ -11,4 +11,11 @@ module.exports = ({ env }) => ({
     path: '/admin',
     url: env('RAILWAY_STATIC_URL')
   },
+
+  settings: {
+    proxy: true,
+    public: {
+      path: '/'
+    }
+  }
 });
