@@ -13,6 +13,14 @@ module.exports = ({ env }) => ({
   admin: {
     path: env('ADMIN_PATH', '/admin'),
     url: env('RAILWAY_STATIC_URL') || env('PUBLIC_URL') || "http://0.0.0.0:" + env.int('PORT', 1337),
+    settings: {
+      healthcheck: {
+        enabled: true,
+        path: '/admin/healthcheck',
+        timeout: 30000,
+        interval: 30000
+      }
+    }
   },
   settings: {
     proxy: true,

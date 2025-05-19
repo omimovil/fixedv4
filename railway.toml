@@ -5,10 +5,10 @@ command = "npm run build"
 [deploy]
 startCommand = "npm run start"
 healthcheckPath = "/admin"
-healthcheckTimeout = 30
-healthcheckInterval = 10
+healthcheckTimeout = 60
+healthcheckInterval = 30
 restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 3
+restartPolicyMaxRetries = 5
 
 [env]
 NODE_ENV = "production"
@@ -21,6 +21,9 @@ ADMIN_URL = "/admin"
 # Optimizaciones de memoria
 MEMORY_LIMIT = "512MB"
 NODE_OPTIONS = "--max-old-space-size=400 --optimize-for-size --max-semi-space-size=100"
+
+# Tiempo de inicio
+RAILWAY_STARTUP_TIMEOUT = "60"
 
 # Configuración adicional para producción
 RAILWAY_STATIC_URL = "https://fixedv4-production-16eb.up.railway.app"
