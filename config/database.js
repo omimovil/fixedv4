@@ -100,30 +100,53 @@ module.exports = ({ env }) => {
 
   // Configuración específica para Railway
   if (env('RAILWAY_ENVIRONMENT')) {
+    // Configuración del pool de conexiones
     config.connection.pool = {
       min: 0,
-      max: 2, // Reducir aún más las conexiones
-      createTimeoutMillis: 30000, // Aumentar timeout
-      acquireTimeoutMillis: 30000, // Aumentar timeout
-      idleTimeoutMillis: 30000, // Aumentar timeout
-      reapIntervalMillis: 10000, // Aumentar intervalo de limpieza
-      createRetryIntervalMillis: 1000, // Aumentar intervalo de reintentos
+      max: 2,
+      createTimeoutMillis: 60000,
+      acquireTimeoutMillis: 60000,
+      idleTimeoutMillis: 60000,
+      reapIntervalMillis: 30000,
+      createRetryIntervalMillis: 2000,
       evict: true,
-      maxUses: 500, // Reducir límite de usos
-      connectionTimeoutMillis: 30000, // Aumentar timeout de conexión
-      requestTimeoutMillis: 30000, // Aumentar timeout de solicitud
-      max: 2, // Reducir máximo de conexiones
-      min: 0, // Mantener mínimo en 0
+      maxUses: 1000,
+      connectionTimeoutMillis: 60000,
+      requestTimeoutMillis: 60000,
       acquire: {
-        timeout: 30000
+        timeout: 60000
       },
       create: {
-        timeout: 30000
+        timeout: 60000
       }
     };
-    config.connection.connectionString = env('DATABASE_URL'); // Usar la URL completa
-    config.connection.ssl = {
-      rejectUnauthorized: false // Deshabilitar verificación SSL
+
+    // Configuración de la conexión PostgreSQL
+    config.connection = {
+      client: 'postgres',
+      connection: {
+        connectionString: env('DATABASE_URL'),
+        ssl: {
+          rejectUnauthorized: false
+        }
+      },
+      pool: {
+        max: 2,
+        min: 0,
+        idleTimeoutMillis: 60000,
+        acquireTimeoutMillis: 60000
+      }
+    };
+
+    // Configuración de red y reintentos
+    config.connection.network = {
+      host: env('DATABASE_HOST', 'localhost'),
+      port: env.int('DATABASE_PORT', 5432),
+      timeout: 60000
+    };
+    config.connection.retry = {
+      max: 5,
+      delay: 2000
     };
   }
 
