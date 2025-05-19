@@ -23,22 +23,16 @@ COPY . .
 # Crear directorio para la base de datos y asegurar permisos correctos
 RUN mkdir -p .tmp && chmod -R 755 .tmp
 
-# Configurar variables de entorno para evitar problemas con SWC
-ENV NODE_OPTIONS="--max-old-space-size=8192 --openssl-legacy-provider"
-ENV STRAPI_DISABLE_EXPERIMENTAL_FEATURES="true"
-ENV STRAPI_DISABLE_ADMIN_REBUILD="true"
-ENV STRAPI_TELEMETRY_DISABLED="true"
-ENV DISABLE_EXPERIMENTAL_COREPACK="true"
-ENV NODE_ENV="production"
+# Configurar variables de entorno para el build
+ENV NODE_ENV=production
+ENV STRAPI_TELEMETRY_DISABLED=true
+ENV NODE_OPTIONS="--max-old-space-size=8192"
 
-# Compilar la aplicación con una estrategia que evite problemas con SWC
-RUN npm run build || \
-    (echo "Primer intento de build falló, intentando sin admin rebuild" && \
-     STRAPI_DISABLE_ADMIN_REBUILD=true npm run build) || \
-    (echo "Segundo intento de build falló, intentando con NODE_ENV=production" && \
-     NODE_ENV=production npm run build) || \
-    (echo "Tercer intento de build falló, intentando con opciones adicionales" && \
-     NODE_OPTIONS="--max-old-space-size=8192 --openssl-legacy-provider" DISABLE_EXPERIMENTAL_COREPACK=true npm run build)
+# Instalar @swc/core de manera global para evitar problemas con los bindings
+RUN npm install -g @swc/core @swc/cli
+
+# Compilar la aplicación
+RUN NODE_ENV=production npm run build
 
 # Segunda etapa para la imagen final
 FROM node:18-bullseye-slim
