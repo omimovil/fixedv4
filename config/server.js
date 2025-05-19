@@ -14,6 +14,13 @@ module.exports = ({ env }) => ({
     path: env('ADMIN_PATH', '/admin'),
     url: env('RAILWAY_STATIC_URL') || env('PUBLIC_URL') || "http://0.0.0.0:" + env.int('PORT', 1337),
   },
+  settings: {
+    proxy: true,
+    public: {
+      path: env('PUBLIC_PATH', '/'),
+      servedByStrapi: true
+    }
+  },
   app: {
     keys: env.array('APP_KEYS'),
   },
