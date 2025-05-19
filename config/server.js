@@ -5,19 +5,18 @@
 //     keys: env.array('APP_KEYS'),
 //   },
 //   webhooks: {
-//     populateRelations: env.bool('WEBHOOKS_POPULATE_RELATIONS', false),
-//   },
-//   url: env('PUBLIC_URL', "http://localhost:1337"),
-// });
-
 module.exports = ({ env }) => ({
-  host: env('HOST', '0.0.0.0'),
+  responseTimeout: env.int('SERVER_RESPONSE_TIMEOUT', 100000),
   port: env.int('PORT', 1337),
+  host: env('HOST', '0.0.0.0'),
+  url: env('APP_URL', 'https://fixedv4-production-16eb.up.railway.app'),
+  admin: {
+    path: env('ADMIN_PATH', '/admin'),
+  },
   app: {
     keys: env.array('APP_KEYS'),
   },
   webhooks: {
     populateRelations: env.bool('WEBHOOKS_POPULATE_RELATIONS', false),
   },
-  url: env('PUBLIC_URL', env('RAILWAY_STATIC_URL') || "https://fixedv4-production.up.railway.app"), // Usa la URL de Railway proporcionada automáticamente
 });
