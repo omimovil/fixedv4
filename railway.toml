@@ -19,29 +19,6 @@ STRAPI_TELEMETRY_DISABLED = "true"
 PORT = "8080"
 HOST = "0.0.0.0"
 
-# URL de Railway (usada en config/server.js para Strapi)
-# RAILWAY_STATIC_URL = "https://fixedv4-production-e66f.up.railway.app"
-
-# PostgreSQL
-DATABASE_CLIENT = "postgres"
-DATABASE_HOST = "${DATABASE_HOST:-localhost}"
-DATABASE_PORT = "${DATABASE_PORT:-5432}"
-DATABASE_NAME = "${DATABASE_NAME:-strapi}"
-DATABASE_USERNAME = "${DATABASE_USERNAME:-strapi}"
-DATABASE_PASSWORD = "${DATABASE_PASSWORD:-strapi}"
-DATABASE_SCHEMA = "public"
-
-# Seguridad
-ADMIN_JWT_SECRET = "p3o4n5m6l7k8j9i0h1g2f3e4d5c6b7a8"
-APP_KEYS = "Wd8LKPepGa6vJb1Lzzsdfg==,KzGa5r9BPepGa6vJb1Lzzsdfg=="
-API_TOKEN_SALT = "a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3"
-TRANSFER_TOKEN_SALT = "z9yYGd2KC3gY9Q1ZdPTnOBSfa0w"
-
-# Cloudinary (si usas subida de imágenes)
-CLOUDINARY_NAME = "dcqblftjd"
-CLOUDINARY_KEY = "953819631515444"
-CLOUDINARY_SECRET = "y4jYGd2KC3gY9Q1ZdPTnOBSfa0w"
-
 # Pool y conexión
 DATABASE_POOL_MIN = "0"
 DATABASE_POOL_MAX = "2"
