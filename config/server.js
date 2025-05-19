@@ -7,12 +7,12 @@
 //   webhooks: {
 module.exports = ({ env }) => ({
   responseTimeout: env.int('SERVER_RESPONSE_TIMEOUT', 100000),
-  port: env.int('PORT', 1337),
+  port: env.int('PORT', 8080), // Usar 8080 como puerto por defecto
   host: env('HOST', '0.0.0.0'),
-  url: env('RAILWAY_STATIC_URL') || env('PUBLIC_URL') || "http://0.0.0.0:" + env.int('PORT', 1337),
+  url: env('RAILWAY_STATIC_URL', env('PUBLIC_URL', env('APP_URL', `http://0.0.0.0:${env.int('PORT', 8080)}`))),
   admin: {
     path: env('ADMIN_PATH', '/admin'),
-    url: env('RAILWAY_STATIC_URL') || env('PUBLIC_URL') || "http://0.0.0.0:" + env.int('PORT', 1337),
+    url: env('RAILWAY_STATIC_URL', env('PUBLIC_URL', env('APP_URL', `http://0.0.0.0:${env.int('PORT', 8080)}`))),
     settings: {
       healthcheck: {
         enabled: true,

@@ -15,8 +15,9 @@ NODE_ENV = "production"
 STRAPI_TELEMETRY_DISABLED = "true"
 DATABASE_SSL = "true"
 DATABASE_SSL_REJECT_UNAUTHORIZED = "false"
-APP_URL = "https://fixedv4-production-16eb.up.railway.app"
-ADMIN_URL = "/admin"
+APP_URL = "${APP_URL:-https://fixedv4-production-16eb.up.railway.app}"
+ADMIN_URL = "${ADMIN_URL:-/admin}"
+PORT = "${PORT:-8080}"
 
 # Configuración de PostgreSQL
 DATABASE_CLIENT = "postgres"
