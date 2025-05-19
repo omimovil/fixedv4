@@ -11,14 +11,18 @@ restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 5
 
 [env]
+# Entorno
 NODE_ENV = "production"
 STRAPI_TELEMETRY_DISABLED = "true"
-DATABASE_SSL = "true"
-DATABASE_SSL_REJECT_UNAUTHORIZED = "false"
-ADMIN_URL = "/admin"
-PORT = "${PORT:-8080}"
 
-# Configuración de PostgreSQL
+# Puerto y host
+PORT = "8080"
+HOST = "0.0.0.0"
+
+# URL de Railway (usada en config/server.js para Strapi)
+RAILWAY_STATIC_URL = "https://fixedv4-production-e66f.up.railway.app"
+
+# PostgreSQL
 DATABASE_CLIENT = "postgres"
 DATABASE_HOST = "${DATABASE_HOST:-localhost}"
 DATABASE_PORT = "${DATABASE_PORT:-5432}"
@@ -27,37 +31,32 @@ DATABASE_USERNAME = "${DATABASE_USERNAME:-strapi}"
 DATABASE_PASSWORD = "${DATABASE_PASSWORD:-strapi}"
 DATABASE_SCHEMA = "public"
 
-# Configuración de seguridad
-ADMIN_JWT_SECRET = "${ADMIN_JWT_SECRET:-p3o4n5m6l7k8j9i0h1g2f3e4d5c6b7a8}"
-APP_KEYS = "${APP_KEYS:-Wd8LKPepGa6vJb1Lzzsdfg==,KzGa5r9BPepGa6vJb1Lzzsdfg==,Wd8LKPepGa6vJb1Lzzsdfg==,KzGa5r9BPepGa6vJb1Lzzsdfg==}"
+# Seguridad
+ADMIN_JWT_SECRET = "p3o4n5m6l7k8j9i0h1g2f3e4d5c6b7a8"
+APP_KEYS = "Wd8LKPepGa6vJb1Lzzsdfg==,KzGa5r9BPepGa6vJb1Lzzsdfg=="
+API_TOKEN_SALT = "a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3"
+TRANSFER_TOKEN_SALT = "z9yYGd2KC3gY9Q1ZdPTnOBSfa0w"
 
-# Configuración de tokens
-API_TOKEN_SALT = "${API_TOKEN_SALT:-a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3}"
-TRANSFER_TOKEN_SALT = "${TRANSFER_TOKEN_SALT:-z9yYGd2KC3gY9Q1ZdPTnOBSfa0w}"
+# Cloudinary (si usas subida de imágenes)
+CLOUDINARY_NAME = "dcqblftjd"
+CLOUDINARY_KEY = "953819631515444"
+CLOUDINARY_SECRET = "y4jYGd2KC3gY9Q1ZdPTnOBSfa0w"
 
-# Configuración de Cloudinary
-CLOUDINARY_NAME = "${CLOUDINARY_NAME:-dcqblftjd}"
-CLOUDINARY_KEY = "${CLOUDINARY_KEY:-953819631515444}"
-CLOUDINARY_SECRET = "${CLOUDINARY_SECRET:-y4jYGd2KC3gY9Q1ZdPTnOBSfa0w}"
-
-# Configuración de host y puerto
-HOST = "${HOST:-0.0.0.0}"
-
-# Configuración de pool de conexiones
+# Pool y conexión
 DATABASE_POOL_MIN = "0"
 DATABASE_POOL_MAX = "2"
 DATABASE_CONNECTION_TIMEOUT = "60000"
 DATABASE_POOL_TIMEOUT = "60000"
 DATABASE_POOL_IDLE_TIMEOUT = "60000"
 
-# Configuración de red
+# Red Railway
 RAILWAY_NETWORK_TIMEOUT = "60000"
 RAILWAY_NETWORK_RETRIES = "5"
 RAILWAY_NETWORK_RETRY_DELAY = "2000"
 
-# Optimizaciones de memoria
+# Memoria
 MEMORY_LIMIT = "512MB"
 NODE_OPTIONS = "--max-old-space-size=400 --optimize-for-size --max-semi-space-size=100"
 
-# Tiempo de inicio
+# Timeout de arranque
 RAILWAY_STARTUP_TIMEOUT = "60"
