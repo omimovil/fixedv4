@@ -66,22 +66,17 @@ module.exports = ({ env }) => {
     postgres: {
       connection: {
         connectionString: env('DATABASE_URL'),
-        host: env('PGHOST'),
-        port: env.int('PGPORT', 5432),
-        database: env('PGDATABASE', 'strapi'),
-        user: env('PGUSER', 'strapi'),
-        password: env('PGPASSWORD'),
-        ssl: {
-          rejectUnauthorized: false
-        },
+        host: env('DATABASE_HOST', 'localhost'),
+        port: env.int('DATABASE_PORT', 5432),
+        database: env('DATABASE_NAME', 'strapi'),
+        user: env('DATABASE_USERNAME', 'strapi'),
+        password: env('DATABASE_PASSWORD', 'strapi'),
+        ssl: env.bool('DATABASE_SSL', true) ? {
+          rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', false), // Railway suele necesitar false
+        } : false,
         schema: env('DATABASE_SCHEMA', 'public'),
       },
-      pool: {
-        min: 2,
-        max: 5,
-        idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 30000
-      }
+      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 10) },
     },
     sqlite: {
       connection: {
@@ -95,11 +90,26 @@ module.exports = ({ env }) => {
     },
   };
 
-  return {
+  const config = {
     connection: {
       client,
       ...connections[client],
       acquireConnectionTimeout: env.int('DATABASE_CONNECTION_TIMEOUT', 60000),
     },
   };
+
+  // Configuración específica para Railway
+  if (env('RAILWAY_ENVIRONMENT')) {
+    config.connection.pool = {
+      min: 0,
+      max: 5,
+      createTimeoutMillis: 30000,
+      acquireTimeoutMillis: 30000,
+      idleTimeoutMillis: 30000,
+      reapIntervalMillis: 1000,
+      createRetryIntervalMillis: 100,
+    };
+  }
+
+  return config;
 };
