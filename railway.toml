@@ -15,25 +15,6 @@ restartPolicyMaxRetries = 5
 NODE_ENV = "production"
 STRAPI_TELEMETRY_DISABLED = "true"
 
-# Puerto y host
-PORT = "8080"
-HOST = "0.0.0.0"
-
 # Pool y conexión
 DATABASE_POOL_MIN = "0"
 DATABASE_POOL_MAX = "2"
-DATABASE_CONNECTION_TIMEOUT = "60000"
-DATABASE_POOL_TIMEOUT = "60000"
-DATABASE_POOL_IDLE_TIMEOUT = "60000"
-
-# Red Railway
-RAILWAY_NETWORK_TIMEOUT = "60000"
-RAILWAY_NETWORK_RETRIES = "5"
-RAILWAY_NETWORK_RETRY_DELAY = "2000"
-
-# Memoria
-MEMORY_LIMIT = "512MB"
-NODE_OPTIONS = "--max-old-space-size=400 --optimize-for-size --max-semi-space-size=100"
-
-# Timeout de arranque
-RAILWAY_STARTUP_TIMEOUT = "60"
