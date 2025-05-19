@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-command = "npm run build"
+command = "npm run migrate && npm run build"
 
 [deploy]
 startCommand = "npm run start"
@@ -18,3 +18,4 @@ DATABASE_POOL_MAX = "5"
 DATABASE_CONNECTION_TIMEOUT = "30000"
 DATABASE_REQUEST_TIMEOUT = "30000"
 APP_URL = "https://fixedv4-production-16eb.up.railway.app"
+ADMIN_URL = "https://fixedv4-production-16eb.up.railway.app/admin"

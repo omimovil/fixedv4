@@ -12,6 +12,7 @@ module.exports = ({ env }) => ({
   url: env('APP_URL', 'https://fixedv4-production-16eb.up.railway.app'),
   admin: {
     path: env('ADMIN_PATH', '/admin'),
+    url: env('APP_URL', 'https://fixedv4-production-16eb.up.railway.app'),
   },
   app: {
     keys: env.array('APP_KEYS'),

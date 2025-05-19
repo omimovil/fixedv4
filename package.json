@@ -13,7 +13,8 @@
     "migrate": "node scripts/init-railway.js && node scripts/railway-migrate.js && node scripts/migrate-to-railway.js",
     "railway:build": "npm run migrate && npm run build",
     "migrate-local": "node scripts/migrate-data.js",
-    "simu": ".\\scripts\\simulate_railway_local_port.bat"
+    "simu": ".\\scripts\\simulate_railway_local_port.bat",
+    "admin": "strapi start"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.11.3",
