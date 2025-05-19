@@ -20,7 +20,7 @@ PORT = "8080"
 HOST = "0.0.0.0"
 
 # URL de Railway (usada en config/server.js para Strapi)
-RAILWAY_STATIC_URL = "https://fixedv4-production-e66f.up.railway.app"
+# RAILWAY_STATIC_URL = "https://fixedv4-production-e66f.up.railway.app"
 
 # PostgreSQL
 DATABASE_CLIENT = "postgres"
