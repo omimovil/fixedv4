@@ -1,11 +1,12 @@
 [build]
 builder = "nixpacks"
-command = "npm run migrate && npm run build"
+command = "npm run build"
 
 [deploy]
 startCommand = "npm run start"
 healthcheckPath = "/admin"
-healthcheckTimeout = 300
+healthcheckTimeout = 30
+healthcheckInterval = 10
 restartPolicyType = "on_failure"
 
 [env]
@@ -15,7 +16,5 @@ DATABASE_SSL = "true"
 DATABASE_SSL_REJECT_UNAUTHORIZED = "false"
 DATABASE_POOL_MIN = "2"
 DATABASE_POOL_MAX = "5"
-DATABASE_CONNECTION_TIMEOUT = "30000"
-DATABASE_REQUEST_TIMEOUT = "30000"
 APP_URL = "https://fixedv4-production-16eb.up.railway.app"
 ADMIN_URL = "https://fixedv4-production-16eb.up.railway.app/admin"
