@@ -17,6 +17,21 @@ module.exports = ({ env }) => ({
     },
   },
 
+  // graphql prodction
+  graphql: {
+    enabled: true,
+    config: {
+      endpoint: "/graphql",
+      shadowCRUD: true,
+      playgroundAlways: true, // ✅ Esto es lo importante
+      depthLimit: 10,
+      amountLimit: 100,
+      apolloServer: {
+        introspection: true, // ✅ También habilita introspección para playground
+      },
+    },
+  },
+
   // 🔍 Algolia Config
   "strapi-algolia": {
     enabled: false,
