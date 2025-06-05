@@ -20,6 +20,10 @@
       "relation": "manyToMany",
       "target": "api::product.product",
       "mappedBy": "delivery_dates"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "deliveryDateName"
     }
   }
 }

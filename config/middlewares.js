@@ -12,7 +12,7 @@ module.exports = [
   {
     name: 'strapi::cors',
     config: {
-      origin: ['http://localhost:3000', process.env.FRONTEND_URL_TUNNEL, '*'], // Permitir cualquier origen en producción
+      origin: ['http://localhost:3000'], // Solo permitir el origen del frontend
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       headers: ['Content-Type', 'Authorization'],
       credentials: true,
@@ -36,9 +36,7 @@ module.exports = [
             "'self'",
             'https:',
             'http:',
-            // 'https://fcc-das-resource-tops.trycloudflare.com',
-            // 'https://bulletin-called-seafood-occasional.trycloudflare.com'
-            process.env.FRONTEND_URL_TUNNEL
+            'http://localhost:3000'
           ],
           'img-src': ["'self'", 'data:', 'blob:', 'https://res.cloudinary.com'],
           'media-src': ["'self'", 'data:', 'blob:'],

@@ -8,5 +8,9 @@ module.exports = ({ env }) => ({
 
   admin: {
     path: '/admin'
-  }
+  },
+  // Set the frontend for use strapi apis
+  frontend: {
+    url: env('FRONTEND_URL', 'http://localhost:3000'),
+  },
 });

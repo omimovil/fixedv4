@@ -265,12 +265,12 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::delivery-date.delivery-date",
-      "inversedBy": "products",
       "pluginOptions": {
         "translate": {
           "translate": "translate"
         }
-      }
+      },
+      "inversedBy": "products"
     },
     "soldTimes": {
       "pluginOptions": {
