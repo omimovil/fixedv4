@@ -95,6 +95,12 @@
       "relation": "oneToOne",
       "target": "api::personal-address.personal-address",
       "inversedBy": "user"
+    },
+    "orders": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
+      "mappedBy": "author"
     }
   }
 }

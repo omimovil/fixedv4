@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_payer_name_names",
+  "info": {
+    "displayName": "name"
+  },
+  "options": {},
+  "attributes": {
+    "given_name": {
+      "type": "string"
+    },
+    "surename": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_pay_pal_payer_email_addresses",
+  "info": {
+    "displayName": "email_address"
+  },
+  "options": {},
+  "attributes": {
+    "payer_id": {
+      "type": "string"
+    },
+    "address": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::personal-address.personal-address"
+    },
+    "name": {
+      "displayName": "name",
+      "type": "component",
+      "repeatable": false,
+      "component": "payer-name.name"
+    }
+  }
+}

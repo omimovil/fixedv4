@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_shipping_category_shipping_components",
+  "info": {
+    "displayName": "shippingComponent"
+  },
+  "options": {},
+  "attributes": {
+    "address": {
+      "displayName": "addressComponent",
+      "type": "component",
+      "repeatable": false,
+      "component": "address-category.address-component"
+    }
+  }
+}

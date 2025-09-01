@@ -1,0 +1,35 @@
+{
+  "kind": "singleType",
+  "collectionName": "shipping_addresses",
+  "info": {
+    "singularName": "shipping-address",
+    "pluralName": "shipping-addresses",
+    "displayName": "ShippingAddress"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "fullName": {
+      "type": "string"
+    },
+    "address_one": {
+      "type": "string"
+    },
+    "address_two": {
+      "type": "string"
+    },
+    "postalCode": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "string"
+    }
+  }
+}

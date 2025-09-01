@@ -1,0 +1,60 @@
+{
+  "collectionName": "components_item_shared_category_item_components",
+  "info": {
+    "displayName": "ItemComponent",
+    "icon": "alien",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "string"
+    },
+    "currencyCode": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    },
+    "sku": {
+      "type": "string"
+    },
+    "productId": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "imageUrl": {
+      "type": "text"
+    },
+    "shippingStatusString": {
+      "type": "string"
+    },
+    "created_date": {
+      "type": "date"
+    },
+    "shippingStatus": {
+      "type": "enumeration",
+      "enum": [
+        "to_ship",
+        "shipped",
+        "delivered",
+        "returned"
+      ],
+      "default": "to_ship",
+      "required": false
+    }
+  }
+}

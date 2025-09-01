@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_address_category_address_components",
+  "info": {
+    "displayName": "addressComponent"
+  },
+  "options": {},
+  "attributes": {
+    "address_line_1": {
+      "type": "string"
+    },
+    "address_line_2": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "phone_number": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string"
+    }
+  }
+}

@@ -1102,13 +1102,18 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     };
   };
   attributes: {
+    author: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    authorId: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    estimatedDelivery: Schema.Attribute.Date;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'>;
-    notes: Schema.Attribute.String;
-    options: Schema.Attribute.JSON;
+    orderNumber: Schema.Attribute.String;
     orderStatus: Schema.Attribute.Enumeration<
       ['pending, paid, cancelled, failed']
     > &
@@ -1117,26 +1122,23 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
-    payment: Schema.Attribute.Relation<'oneToOne', 'api::payment.payment'>;
-    paypalOrderId: Schema.Attribute.String;
-    price: Schema.Attribute.Decimal;
-    products: Schema.Attribute.Relation<'manyToMany', 'api::product.product'>;
-    publishedAt: Schema.Attribute.DateTime;
-    quantity: Schema.Attribute.Integer;
-    shipping: Schema.Attribute.Relation<'oneToOne', 'api::shipping.shipping'>;
-    shipping_state: Schema.Attribute.Relation<
+    paymentStatus: Schema.Attribute.String;
+    paypal_payment: Schema.Attribute.Relation<
       'oneToOne',
-      'api::shipping-state.shipping-state'
-    > &
-      Schema.Attribute.Private;
+      'api::paypal-payment.paypal-payment'
+    >;
+    paypalOrderId: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    shipping: Schema.Attribute.Relation<'oneToOne', 'api::shipping.shipping'>;
     shippingPrice: Schema.Attribute.Decimal;
-    title: Schema.Attribute.Component<'order-items.orders-items', false> &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
+    shippingProvider: Schema.Attribute.String;
+    shippingStatus: Schema.Attribute.Enumeration<
+      ['to_ship', 'shipped', 'delivered', 'returned', 'confirmed']
+    > &
+      Schema.Attribute.DefaultTo<'to_ship'>;
+    subTotal: Schema.Attribute.Decimal;
     totalPrice: Schema.Attribute.Decimal;
+    trackingNumber: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1201,12 +1203,59 @@ export interface ApiPaymentPayment extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::payment.payment'
     >;
-    order: Schema.Attribute.Relation<'oneToOne', 'api::order.order'>;
     payerEmail: Schema.Attribute.String;
     paymentStatus: Schema.Attribute.Enumeration<['COMPLETED,PENDING,FAILED']>;
     paypalTransactionId: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     rawResponse: Schema.Attribute.JSON;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPaypalPaymentPaypalPayment
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'paypal_payments';
+  info: {
+    description: '';
+    displayName: 'PaypalPayment';
+    pluralName: 'paypal-payments';
+    singularName: 'paypal-payment';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.String;
+    Item: Schema.Attribute.Component<
+      'item-shared-category.item-component',
+      true
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::paypal-payment.paypal-payment'
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Relation<'oneToOne', 'api::order.order'>;
+    payeerComponent: Schema.Attribute.DynamicZone<['payeer-category.payeer']>;
+    paymentId: Schema.Attribute.String;
+    paymentStatus: Schema.Attribute.Enumeration<
+      ['PENDING,', 'CANCELED,', 'COMPLETED,']
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    purchaseUnitsComponent: Schema.Attribute.DynamicZone<
+      [
+        'item-category.item-component',
+        'amount-category.amount-component',
+        'shipping-category.shipping-component',
+      ]
+    >;
+    sku: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1458,12 +1507,6 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
-        };
-      }>;
-    orders: Schema.Attribute.Relation<'manyToMany', 'api::order.order'> &
-      Schema.Attribute.SetPluginOptions<{
-        translate: {
-          translate: 'translate';
         };
       }>;
     payment_methods: Schema.Attribute.Relation<
@@ -1785,6 +1828,41 @@ export interface ApiReviewReview extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiShippingAddressShippingAddress
+  extends Struct.SingleTypeSchema {
+  collectionName: 'shipping_addresses';
+  info: {
+    displayName: 'ShippingAddress';
+    pluralName: 'shipping-addresses';
+    singularName: 'shipping-address';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    address_one: Schema.Attribute.String;
+    address_two: Schema.Attribute.String;
+    city: Schema.Attribute.String;
+    country: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    fullName: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::shipping-address.shipping-address'
+    > &
+      Schema.Attribute.Private;
+    phoneNumber: Schema.Attribute.String;
+    postalCode: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiShippingStateShippingState
   extends Struct.CollectionTypeSchema {
   collectionName: 'shipping_states';
@@ -1810,7 +1888,6 @@ export interface ApiShippingStateShippingState
       'api::shipping-state.shipping-state'
     > &
       Schema.Attribute.Private;
-    order: Schema.Attribute.Relation<'oneToOne', 'api::order.order'>;
     products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
     return: Schema.Attribute.Boolean &
@@ -2441,6 +2518,7 @@ export interface PluginUsersPermissionsUser
       'plugin::users-permissions.user'
     > &
       Schema.Attribute.Private;
+    orders: Schema.Attribute.Relation<'oneToMany', 'api::order.order'>;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
@@ -2501,12 +2579,14 @@ declare module '@strapi/strapi' {
       'api::order.order': ApiOrderOrder;
       'api::payment-method.payment-method': ApiPaymentMethodPaymentMethod;
       'api::payment.payment': ApiPaymentPayment;
+      'api::paypal-payment.paypal-payment': ApiPaypalPaymentPaypalPayment;
       'api::personal-address.personal-address': ApiPersonalAddressPersonalAddress;
       'api::product-in-cart.product-in-cart': ApiProductInCartProductInCart;
       'api::product.product': ApiProductProduct;
       'api::purchase.purchase': ApiPurchasePurchase;
       'api::rating.rating': ApiRatingRating;
       'api::review.review': ApiReviewReview;
+      'api::shipping-address.shipping-address': ApiShippingAddressShippingAddress;
       'api::shipping-state.shipping-state': ApiShippingStateShippingState;
       'api::shipping.shipping': ApiShippingShipping;
       'api::shopping-cart.shopping-cart': ApiShoppingCartShoppingCart;

@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_item_category_item_components",
+  "info": {
+    "displayName": "itemComponent"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "decimal"
+    },
+    "unitAmount": {
+      "displayName": "unitAmount",
+      "type": "component",
+      "repeatable": false,
+      "component": "unit-amount-category.unit-amount"
+    }
+  }
+}

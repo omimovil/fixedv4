@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_pay_pal_payer_payer_zones",
+  "info": {
+    "displayName": "PayerZone"
+  },
+  "options": {},
+  "attributes": {
+    "payer_id": {
+      "type": "string"
+    }
+  }
+}

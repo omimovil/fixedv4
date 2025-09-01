@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "paypal_payments",
+  "info": {
+    "singularName": "paypal-payment",
+    "pluralName": "paypal-payments",
+    "displayName": "PaypalPayment",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "paymentId": {
+      "type": "string"
+    },
+    "paymentStatus": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING,",
+        "CANCELED,",
+        "COMPLETED,"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "sku": {
+      "type": "string"
+    },
+    "purchaseUnitsComponent": {
+      "type": "dynamiczone",
+      "components": [
+        "item-category.item-component",
+        "amount-category.amount-component",
+        "shipping-category.shipping-component"
+      ]
+    },
+    "payeerComponent": {
+      "type": "dynamiczone",
+      "components": [
+        "payeer-category.payeer"
+      ]
+    },
+    "Item": {
+      "displayName": "ItemComponent",
+      "type": "component",
+      "repeatable": true,
+      "component": "item-shared-category.item-component"
+    },
+    "order": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::order.order",
+      "mappedBy": "paypal_payment"
+    }
+  }
+}

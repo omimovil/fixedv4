@@ -354,17 +354,6 @@
       },
       "type": "richtext"
     },
-    "orders": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::order.order",
-      "pluginOptions": {
-        "translate": {
-          "translate": "translate"
-        }
-      },
-      "inversedBy": "products"
-    },
     "shipping_state": {
       "type": "relation",
       "relation": "manyToOne",

@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_unit_amount_category_unit_amounts",
+  "info": {
+    "displayName": "unitAmount"
+  },
+  "options": {},
+  "attributes": {
+    "currencyCode": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    }
+  }
+}

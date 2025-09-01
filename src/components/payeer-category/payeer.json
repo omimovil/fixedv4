@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_payeer_category_payeers",
+  "info": {
+    "displayName": "payeer"
+  },
+  "options": {},
+  "attributes": {
+    "emailAddress": {
+      "type": "email"
+    },
+    "payeerId": {
+      "type": "string"
+    },
+    "name": {
+      "displayName": "nameComponent",
+      "type": "component",
+      "repeatable": false,
+      "component": "name-category.name-component"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_purchase_units_category_purchase_units",
+  "info": {
+    "displayName": "purchaseUnits"
+  },
+  "options": {},
+  "attributes": {
+    "amount": {
+      "displayName": "amount",
+      "type": "component",
+      "repeatable": false,
+      "component": "purchase-units-category.amount"
+    }
+  }
+}

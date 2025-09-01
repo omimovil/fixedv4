@@ -16,12 +16,6 @@
     }
   },
   "attributes": {
-    "order": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::order.order",
-      "inversedBy": "payment"
-    },
     "paypalTransactionId": {
       "type": "string"
     },

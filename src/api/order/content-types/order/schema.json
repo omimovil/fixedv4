@@ -16,19 +16,6 @@
     }
   },
   "attributes": {
-    "products": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::product.product",
-      "mappedBy": "orders"
-    },
-    "shipping_state": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::shipping-state.shipping-state",
-      "private": true,
-      "inversedBy": "order"
-    },
     "totalPrice": {
       "type": "decimal"
     },
@@ -49,40 +36,55 @@
     "paypalOrderId": {
       "type": "string"
     },
-    "notes": {
-      "type": "string"
-    },
-    "title": {
-      "displayName": "ordersItems",
-      "type": "component",
-      "repeatable": false,
-      "component": "order-items.orders-items",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
-    "price": {
-      "type": "decimal"
-    },
-    "quantity": {
-      "type": "integer"
-    },
-    "options": {
-      "type": "json"
-    },
-    "payment": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::payment.payment",
-      "mappedBy": "order"
-    },
     "shipping": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::shipping.shipping",
       "mappedBy": "order"
+    },
+    "paypal_payment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::paypal-payment.paypal-payment",
+      "inversedBy": "order"
+    },
+    "orderNumber": {
+      "type": "string"
+    },
+    "subTotal": {
+      "type": "decimal"
+    },
+    "trackingNumber": {
+      "type": "string"
+    },
+    "shippingProvider": {
+      "type": "string"
+    },
+    "estimatedDelivery": {
+      "type": "date"
+    },
+    "paymentStatus": {
+      "type": "string"
+    },
+    "author": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "orders"
+    },
+    "authorId": {
+      "type": "string"
+    },
+    "shippingStatus": {
+      "type": "enumeration",
+      "enum": [
+        "to_ship",
+        "shipped",
+        "delivered",
+        "returned",
+        "confirmed"
+      ],
+      "default": "to_ship"
     }
   }
 }

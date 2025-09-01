@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_amount_category_amount_components",
+  "info": {
+    "displayName": "amountComponent"
+  },
+  "options": {},
+  "attributes": {
+    "currencyCode": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    }
+  }
+}
