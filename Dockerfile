@@ -1,50 +1,65 @@
-FROM node:18-bullseye AS builder
+-# Usar una imagen base más ligera con soporte multi-architectura
+FROM --platform=linux/amd64 node:18-alpine AS builder
 
 WORKDIR /app
 
-# Instalar dependencias necesarias para compilaciones nativas y PostgreSQL
-RUN apt-get update && apt-get install -y \
+# Instalar dependencias necesarias para compilaciones nativas
+RUN apk add --no-cache \
     python3 \
     make \
     g++ \
-    build-essential \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+    gcc \
+    libc-dev \
+    postgresql-dev
 
-# Copiar archivos de dependencias
+# Configurar npm para mejor rendimiento
+RUN npm config set update-notifier false \
+    && npm config set fund false \
+    && npm config set audit false
+
+# Copiar solo los archivos necesarios para instalar dependencias
 COPY package*.json ./
 
+# Instalar dependencias de producción primero
+RUN npm ci --only=production --prefer-offline --no-audit --progress=false
+
+# Instalar dependencias de desarrollo
+RUN npm ci --include=dev --prefer-offline --no-audit --progress=false
+
 # Instalar una versión específica de @swc/core que sea compatible
-RUN npm install @swc/core@1.3.98
+RUN npm install @swc/core@1.3.92 --save-exact --no-package-lock --no-save
 
-# Instalar todas las dependencias (incluyendo devDependencies)
-RUN npm install
+# Limpiar caché para reducir el tamaño de la imagen
+RUN npm cache clean --force
 
-# Copiar el resto de archivos
+# Copiar el resto de archivos necesarios para el build
 COPY . .
+
+# Asegurar que los permisos sean correctos
+RUN chown -R node:node /app
 
 # Crear directorio para la base de datos y asegurar permisos correctos
 RUN mkdir -p .tmp && chmod -R 755 .tmp
 
-# Configurar variables de entorno para evitar problemas con SWC
-ENV NODE_OPTIONS="--max-old-space-size=8192 --openssl-legacy-provider"
-ENV STRAPI_DISABLE_EXPERIMENTAL_FEATURES="true"
-ENV STRAPI_DISABLE_ADMIN_REBUILD="true"
-ENV STRAPI_TELEMETRY_DISABLED="true"
-ENV DISABLE_EXPERIMENTAL_COREPACK="true"
-ENV NODE_ENV="production"
-# Forzar el uso de Babel en lugar de SWC
-ENV STRAPI_DISABLE_ESBUILD="true"
-# Deshabilitar completamente SWC
-ENV NODE_OPTIONS="--max-old-space-size=8192 --openssl-legacy-provider"
+# Configurar variables de entorno para el build
 ENV NODE_ENV=production
+ENV NODE_OPTIONS="--max-old-space-size=4096 --openssl-legacy-provider"
+
+# Deshabilitar características experimentales de Strapi
 ENV STRAPI_DISABLE_ESBUILD=true
 ENV STRAPI_DISABLE_EXPERIMENTAL_FEATURES=true
+ENV STRAPI_DISABLE_ADMIN_REBUILD=true
+ENV STRAPI_TELEMETRY_DISABLED=true
+
+# Configuración de npm
 ENV NPM_CONFIG_FUND=false
 ENV NPM_CONFIG_AUDIT=false
 ENV NPM_CONFIG_UPDATE_NOTIFIER=false
 ENV NPM_CONFIG_PROGRESS=false
+
+# Otras optimizaciones
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV DISABLE_EXPERIMENTAL_COREPACK=true
 
 # Compilar la aplicación con una estrategia que evite problemas con SWC
 RUN npm run build -- --debug || \
@@ -56,16 +71,13 @@ RUN npm run build -- --debug || \
      STRAPI_DISABLE_ESBUILD=true \
      npm run build -- --debug)
 
-# Segunda etapa para la imagen final
-FROM node:18-bullseye-slim
+# Segunda etapa para la imagen final (más ligera)
+FROM --platform=linux/amd64 node:18-alpine
 
 WORKDIR /app
 
-# Instalar dependencias necesarias para ejecución y PostgreSQL
-RUN apt-get update && apt-get install -y \
-    python3 \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+# Instalar solo dependencias necesarias para producción
+RUN apk add --no-cache postgresql-client
 
 # Copiar archivos de dependencias
 COPY package*.json ./
