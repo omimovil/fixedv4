@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y \
 # Copiar archivos de dependencias
 COPY package*.json ./
 
+# Instalar una versión específica de @swc/core que sea compatible
+RUN npm install @swc/core@1.3.98
+
 # Instalar todas las dependencias (incluyendo devDependencies)
 RUN npm install
 
@@ -32,15 +35,26 @@ ENV DISABLE_EXPERIMENTAL_COREPACK="true"
 ENV NODE_ENV="production"
 # Forzar el uso de Babel en lugar de SWC
 ENV STRAPI_DISABLE_ESBUILD="true"
+# Deshabilitar completamente SWC
+ENV NODE_OPTIONS="--max-old-space-size=8192 --openssl-legacy-provider"
+ENV NODE_ENV=production
+ENV STRAPI_DISABLE_ESBUILD=true
+ENV STRAPI_DISABLE_EXPERIMENTAL_FEATURES=true
+ENV NPM_CONFIG_FUND=false
+ENV NPM_CONFIG_AUDIT=false
+ENV NPM_CONFIG_UPDATE_NOTIFIER=false
+ENV NPM_CONFIG_PROGRESS=false
+ENV NEXT_TELEMETRY_DISABLED=1
 
 # Compilar la aplicación con una estrategia que evite problemas con SWC
-RUN npm run build || \
+RUN npm run build -- --debug || \
     (echo "Primer intento de build falló, intentando sin admin rebuild" && \
-     STRAPI_DISABLE_ADMIN_REBUILD=true npm run build) || \
-    (echo "Segundo intento de build falló, intentando con NODE_ENV=production" && \
-     NODE_ENV=production npm run build) || \
-    (echo "Tercer intento de build falló, intentando con opciones adicionales" && \
-     NODE_OPTIONS="--max-old-space-size=8192 --openssl-legacy-provider" DISABLE_EXPERIMENTAL_COREPACK=true npm run build)
+     STRAPI_DISABLE_ADMIN_REBUILD=true npm run build -- --debug) || \
+    (echo "Segundo intento de build falló, intentando con opciones adicionales" && \
+     NODE_OPTIONS="--max-old-space-size=8192 --openssl-legacy-provider" \
+     NODE_ENV=production \
+     STRAPI_DISABLE_ESBUILD=true \
+     npm run build -- --debug)
 
 # Segunda etapa para la imagen final
 FROM node:18-bullseye-slim
