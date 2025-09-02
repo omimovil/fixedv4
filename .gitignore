@@ -94,6 +94,8 @@ logs
 results
 node_modules
 .node_history
+.console
+npm-debug.log*
 
 ############################
 # Tests
