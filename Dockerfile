@@ -1,12 +1,12 @@
 # Usar la misma imagen base que en el build exitoso
-FROM --platform=linux/amd64 node:18-bullseye AS builder
+FROM --platform=linux/amd64 node:20-bookworm-slim AS builder
 
 # Yarn ya está instalado en la imagen base
 
 WORKDIR /app
 
 # Instalar dependencias necesarias para compilaciones nativas
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     make \
     g++ \
@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
 COPY package*.json ./
 
 # Usar yarn para instalar dependencias (como en el build exitoso)
-RUN yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile --ignore-engines
 
 # Limpiar caché para reducir el tamaño de la imagen
 RUN npm cache clean --force
@@ -57,14 +57,14 @@ ENV DISABLE_EXPERIMENTAL_COREPACK=true
 RUN yarn run build
 
 # Segunda etapa para la imagen final
-FROM --platform=linux/amd64 node:18-bullseye
+FROM --platform=linux/amd64 node:20-bookworm-slim
 
 # Yarn ya está instalado en la imagen base
 
 WORKDIR /app
 
 # Instalar solo dependencias necesarias para producción
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
