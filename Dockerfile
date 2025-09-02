@@ -1,8 +1,7 @@
 # Usar la misma imagen base que en el build exitoso
 FROM --platform=linux/amd64 node:18-bullseye AS builder
 
-# Instalar yarn globalmente
-RUN npm install -g yarn
+# Yarn ya está instalado en la imagen base
 
 WORKDIR /app
 
@@ -60,8 +59,7 @@ RUN yarn run build
 # Segunda etapa para la imagen final
 FROM --platform=linux/amd64 node:18-bullseye
 
-# Instalar yarn globalmente
-RUN npm install -g yarn
+# Yarn ya está instalado en la imagen base
 
 WORKDIR /app
 
