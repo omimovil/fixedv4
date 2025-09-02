@@ -1,4 +1,4 @@
--# Usar la misma imagen base que en el build exitoso
+# Usar la misma imagen base que en el build exitoso
 FROM --platform=linux/amd64 node:18-bullseye AS builder
 
 # Instalar yarn globalmente
