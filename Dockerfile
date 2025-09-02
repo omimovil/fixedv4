@@ -30,6 +30,8 @@ ENV STRAPI_DISABLE_ADMIN_REBUILD="true"
 ENV STRAPI_TELEMETRY_DISABLED="true"
 ENV DISABLE_EXPERIMENTAL_COREPACK="true"
 ENV NODE_ENV="production"
+# Forzar el uso de Babel en lugar de SWC
+ENV STRAPI_DISABLE_ESBUILD="true"
 
 # Compilar la aplicación con una estrategia que evite problemas con SWC
 RUN npm run build || \
@@ -71,6 +73,8 @@ ENV NODE_OPTIONS="--openssl-legacy-provider"
 ENV NODE_ENV="production"
 ENV STRAPI_TELEMETRY_DISABLED="true"
 ENV DISABLE_EXPERIMENTAL_COREPACK="true"
+# Forzar el uso de Babel en producción
+ENV STRAPI_DISABLE_ESBUILD="true"
 
 EXPOSE 1337
 
